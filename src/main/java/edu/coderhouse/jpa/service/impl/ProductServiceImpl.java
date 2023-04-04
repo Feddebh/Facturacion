@@ -6,6 +6,8 @@ import edu.coderhouse.jpa.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -17,4 +19,16 @@ private ProductRepository productRepository;
     public Product addProduct(Product candidateProduct) {
         return productRepository.save(candidateProduct);
     }
+
+    @Override
+    public void deleteProduct(Long productId) {
+         productRepository.deleteById(productId);
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+
 }
