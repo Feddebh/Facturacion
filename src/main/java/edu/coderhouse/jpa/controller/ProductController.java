@@ -18,7 +18,7 @@ public class ProductController {
     @Autowired
     private ProductService service;
 
-    @PostMapping(value = "/", consumes = "application/json", produces = "application/json")
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<Product> addProduct(@RequestBody Product candidateProduct){
         return ResponseEntity.ok(service.addProduct(candidateProduct));
 

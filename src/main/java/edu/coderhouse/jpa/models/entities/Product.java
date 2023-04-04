@@ -1,6 +1,8 @@
 package edu.coderhouse.jpa.models.entities;
 
 
+import lombok.*;
+
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,11 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "products")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class Product {
 
   @Id
@@ -20,7 +27,7 @@ public class Product {
   @Column(name = "description", length = 150)
   private String description;
 
-  @Column(name = "code", nullable = false, length = 50)
+  @Column(name = "code", length = 50)
   private String code;
 
   @Column(name = "stock")
