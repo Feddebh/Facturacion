@@ -14,23 +14,23 @@ import java.util.function.Predicate;
 public class ProductController {
 
     @Autowired
-    private ProductService service;
+    private ProductService productService;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<Product> addProduct(@RequestBody Product candidateProduct){
-        return ResponseEntity.ok(service.addProduct(candidateProduct));
+        return ResponseEntity.ok(productService.addProduct(candidateProduct));
     }
 
     @DeleteMapping(value= "/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Long productId){
-        service.deleteProduct(productId);
+        productService.deleteProduct(productId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Product>> getAllProducts(){
 
-        return ResponseEntity.ok(service.getAllProducts());
+        return ResponseEntity.ok(productService.getAllProducts());
 
     }
 

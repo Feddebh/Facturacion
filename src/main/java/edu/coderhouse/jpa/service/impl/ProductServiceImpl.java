@@ -22,7 +22,7 @@ private ProductRepository productRepository;
 
     @Override
     public void deleteProduct(Long productId) {
-         productRepository.deleteById(productId);
+        productRepository.deleteById(productId);
     }
 
     @Override

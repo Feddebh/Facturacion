@@ -1,5 +1,7 @@
 package edu.coderhouse.jpa.service;
 
-public interface ClientService {
+import edu.coderhouse.jpa.models.entities.Client;
 
+public interface ClientService {
+Client addClient(Client candidateClient);
 }
