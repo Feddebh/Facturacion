@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping ("/v1/billing")
 
-public class BillingControler {
+public class BillingController {
 
     @PostMapping(value = "/purchase", consumes = "application/json", produces = "application/json")
     public ResponseEntity<PurchaseResponse> purchase (@RequestBody PurchaseRequest request) {
-
+    return null;
     }
 }

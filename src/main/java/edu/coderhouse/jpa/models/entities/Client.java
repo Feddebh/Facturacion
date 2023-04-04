@@ -1,4 +1,4 @@
-package edu.coderhouse.jpa.entities;
+package edu.coderhouse.jpa.models.entities;
 
 
 import javax.persistence.Column;

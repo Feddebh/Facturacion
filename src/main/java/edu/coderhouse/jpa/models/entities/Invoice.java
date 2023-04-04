@@ -1,4 +1,4 @@
-package edu.coderhouse.jpa.entities;
+package edu.coderhouse.jpa.models.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
