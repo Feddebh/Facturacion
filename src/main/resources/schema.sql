@@ -1,4 +1,4 @@
-CREATE TABLE clients
+CREATE TABLE IF NOT EXISTS clients
 (
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(75) NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE clients
 );
 
 
-CREATE TABLE invoice
+CREATE TABLE IF NOT EXISTS invoice
 (
     id INT NOT NULL AUTO_INCREMENT,
     created_at DATETIME NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE invoice
     FOREIGN KEY (client_id) REFERENCES clients(id)
 );
 
-CREATE TABLE products
+CREATE TABLE IF NOT EXISTS products
 (
     id INT NOT NULL AUTO_INCREMENT,
     description VARCHAR(150) NOT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE products
     PRIMARY KEY (id)
 );
 
-CREATE TABLE invoice_details
+CREATE TABLE IF NOT EXISTS invoice_details
 (
     invoice_detail_id INT NOT NULL AUTO_INCREMENT,
     invoice_id INT,

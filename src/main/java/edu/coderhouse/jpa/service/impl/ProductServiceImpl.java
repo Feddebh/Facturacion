@@ -1,5 +1,7 @@
 package edu.coderhouse.jpa.service.impl;
 
+import edu.coderhouse.jpa.exceptions.ClientNotFoundException;
+import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.models.entities.Product;
 import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.ProductService;
@@ -7,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -32,9 +35,15 @@ private ProductRepository productRepository;
 
     @Override
     public Product getProductById(Long productId) {
-        return null;
-    }
+        Optional<Product> optionalProduct = productRepository.findById(productId);
+        if (optionalProduct.isPresent()) {
+            return optionalProduct.get();
+        } else {
 
+            throw new ClientNotFoundException("No se encuentra el producto con ID: " + productId);
+
+        }
+    }
     @Override
     public Product updateProduct(Long productId, Product updatedProduct) {
 
@@ -51,6 +60,7 @@ private ProductRepository productRepository;
     }
 
     }
+
 
 
 
