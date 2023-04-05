@@ -1,14 +1,13 @@
 package edu.coderhouse.jpa.controller;
-
 import edu.coderhouse.jpa.models.entities.Client;
-import edu.coderhouse.jpa.models.entities.Product;
 import edu.coderhouse.jpa.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1/client")
 public class ClientController {
@@ -19,6 +18,35 @@ public class ClientController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<Client> addClient(@RequestBody Client candidateClient){
         return ResponseEntity.ok(clientservice.addClient(candidateClient));
+    }
+
+    @PutMapping(value= "/{clientId}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<Client> updateClient(@PathVariable Long clientId, @RequestBody Client updatedClient){
+        Client updated = clientservice.updateCLient(clientId, updatedClient);
+        return ResponseEntity.ok(updated);
+
+    }
+
+
+    @DeleteMapping(value= "/{clientId}")
+    public ResponseEntity<Void> deleteClient(@PathVariable Long clientId){
+        clientservice.deleteClient(clientId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<List<Client>> getAllClients(){
+        return ResponseEntity.ok(clientservice.getAllClients());
+    }
+
+    // Obtener un cliente por ID.
+    @GetMapping(value= "/{clientId}", produces = "application/json")
+    public ResponseEntity<Client> getClientById(@PathVariable Long clientId){
+        Client client = clientservice.getClientById(clientId);
+        if (client == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(client);
     }
 
 }

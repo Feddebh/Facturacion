@@ -2,7 +2,6 @@ package edu.coderhouse.jpa.models.entities;
 
 
 import lombok.*;
-
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;

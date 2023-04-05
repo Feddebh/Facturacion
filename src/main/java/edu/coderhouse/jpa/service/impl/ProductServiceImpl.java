@@ -30,5 +30,27 @@ private ProductRepository productRepository;
         return productRepository.findAll();
     }
 
+    @Override
+    public Product getProductById(Long productId) {
+        return null;
+    }
 
-}
+    @Override
+    public Product updateProduct(Long productId, Product updatedProduct) {
+
+        Product existingProduct = productRepository.findById(productId).orElse(null);
+        if(existingProduct != null) {
+            existingProduct.setDescription(updatedProduct.getDescription());
+            existingProduct.setCode(updatedProduct.getCode());
+            existingProduct.setStock(updatedProduct.getStock());
+            existingProduct.setPrice(updatedProduct.getPrice());
+
+            return productRepository.save(existingProduct);
+        }
+        return null;
+    }
+
+    }
+
+
+

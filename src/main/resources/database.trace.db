@@ -1,9 +1,0 @@
-2023-04-03 23:25:24 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
-insert into products (id, code, description, price, stock) values (null, ?, ?, ?, ?) [42102-200]
-2023-04-03 23:26:24 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "PRODUCTS" not found; SQL statement:
-insert into products (id, code, description, price, stock) values (null, ?, ?, ?, ?) [42102-200]
-2023-04-03 23:33:12 jdbc[13]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FORM[*] PRODUCTS"; SQL statement:
-SELECT * FORM PRODUCTS [42000-200]
