@@ -17,4 +17,10 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NullParameterException.class)
+    public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
+        return ResponseEntity.badRequest().body
+                ("Se ha producido una excepción de tipo NullPointerException: " + ex.getMessage());
+    }
+
 }

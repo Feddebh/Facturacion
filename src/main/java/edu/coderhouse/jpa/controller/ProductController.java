@@ -3,6 +3,8 @@ package edu.coderhouse.jpa.controller;
 
 import edu.coderhouse.jpa.models.entities.Product;
 import edu.coderhouse.jpa.service.ProductService;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +18,13 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Product> addProduct(@RequestBody Product candidateProduct){
+    public ResponseEntity<Product> addProduct(@Valid @RequestBody Product candidateProduct){
         return ResponseEntity.ok(productService.addProduct(candidateProduct));
     }
 
     @PutMapping(value= "/{productId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product updatedProduct){
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long productId, @Valid @RequestBody Product updatedProduct){
         Product updated = productService.updateProduct(productId, updatedProduct);
         return ResponseEntity.ok(updated);
 
@@ -40,7 +43,7 @@ public class ProductController {
 
     }
     @GetMapping(value = "/{productId}", produces = "application/json")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId){
+    public ResponseEntity<Product> getProductById(@NotNull @PathVariable Long productId){
         Product product = productService.getProductById(productId);
         if (product == null) {
             return ResponseEntity.notFound().build();

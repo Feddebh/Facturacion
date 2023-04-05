@@ -1,6 +1,8 @@
 package edu.coderhouse.jpa.controller;
 import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.service.ClientService;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,12 @@ public class ClientController {
     private ClientService clientservice;
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Client> addClient(@RequestBody Client candidateClient){
+    public ResponseEntity<Client> addClient(@Valid @RequestBody Client candidateClient){
         return ResponseEntity.ok(clientservice.addClient(candidateClient));
     }
 
     @PutMapping(value= "/{clientId}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Client> updateClient(@PathVariable Long clientId, @RequestBody Client updatedClient){
+    public ResponseEntity<Client> updateClient(@PathVariable Long clientId, @Valid @RequestBody Client updatedClient){
         Client updated = clientservice.updateCLient(clientId, updatedClient);
         return ResponseEntity.ok(updated);
 
@@ -40,8 +42,9 @@ public class ClientController {
     }
 
     // Obtener un cliente por ID.
+
     @GetMapping(value= "/{clientId}", produces = "application/json")
-    public ResponseEntity<Client> getClientById(@PathVariable Long clientId){
+    public ResponseEntity<Client> getClientById(@NotNull @PathVariable Long clientId){
         Client client = clientservice.getClientById(clientId);
         if (client == null) {
             return ResponseEntity.notFound().build();

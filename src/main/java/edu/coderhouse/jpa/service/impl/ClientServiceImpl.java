@@ -1,6 +1,7 @@
 package edu.coderhouse.jpa.service.impl;
 
 import edu.coderhouse.jpa.exceptions.ClientNotFoundException;
+import edu.coderhouse.jpa.exceptions.NullParameterException;
 import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.service.ClientService;
@@ -15,8 +16,14 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
+
     @Override
-    public Client addClient(Client candidateClient){ return clientRepository.save(candidateClient); }
+    public Client addClient(Client candidateClient){
+        if(candidateClient == null) {
+            throw new NullParameterException("El parámetro candidateClient no puede ser nulo");
+        }
+        return clientRepository.save(candidateClient);
+    }
 
     @Override
     public void deleteClient(Long clientId) {
@@ -42,13 +49,20 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
         public Client updateCLient(Long clientId, Client updatedClient) {
-        Client existingClient = clientRepository.findById(clientId).orElse(null);
-        if(existingClient != null) {
-            existingClient.setName(updatedClient.getName());
-            existingClient.setLastName(updatedClient.getLastName());
-            existingClient.setDocNumber(updatedClient.getDocNumber());
-            return clientRepository.save(existingClient);
+
+        if (clientId == null) {
+            throw new NullParameterException("El parametro Id del cliente no puede ser null");
+        } else if (updatedClient == null) {
+            throw new NullParameterException("El parámetro updatedClient no puede ser null");
+        } else {
+            Client existingClient = clientRepository.findById(clientId).orElse(null);
+            if (existingClient != null) {
+                existingClient.setName(updatedClient.getName());
+                existingClient.setLastName(updatedClient.getLastName());
+                existingClient.setDocNumber(updatedClient.getDocNumber());
+                return clientRepository.save(existingClient);
+            }
+            return null;
         }
-        return null;
-        }
+    }
 }
