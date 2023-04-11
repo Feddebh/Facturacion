@@ -1,5 +1,8 @@
 package edu.coderhouse.jpa.models.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +17,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "invoice_details")
+@Getter
+@Setter
 public class InvoiceDetail {
 
   @Id

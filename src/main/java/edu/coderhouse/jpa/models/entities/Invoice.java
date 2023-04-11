@@ -1,5 +1,8 @@
 package edu.coderhouse.jpa.models.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -13,6 +16,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "invoice")
+@Getter
+@Setter
 public class Invoice {
 
   @Id
@@ -28,6 +33,10 @@ public class Invoice {
   @ManyToOne
   @JoinColumn(name = "client_id")
   private Client client;
+
+  public InvoiceDetail[] getInvoiceDetails() {
+    return new InvoiceDetail[0];
+  }
 
  /*
   Vamos a necesitarla en el futuro

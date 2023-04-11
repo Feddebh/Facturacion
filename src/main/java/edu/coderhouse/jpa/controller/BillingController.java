@@ -1,20 +1,29 @@
 package edu.coderhouse.jpa.controller;
 
-import edu.coderhouse.jpa.models.dto.PurchaseRequest;
-import edu.coderhouse.jpa.models.dto.PurchaseResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import edu.coderhouse.jpa.models.entities.Invoice;
+import edu.coderhouse.jpa.service.impl.BillingServiceImpl;
 
 @RestController
-@RequestMapping ("/v1/billing")
-
+@RequestMapping("/v1/billing")
 public class BillingController {
 
-    @PostMapping(value = "/purchase", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<PurchaseResponse> purchase (@RequestBody PurchaseRequest request) {
-    return null;
+    @Autowired
+    private BillingServiceImpl billingServiceImpl;
+
+    @PostMapping("/invoices")
+    public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) {
+        return billingServiceImpl.createInvoice(invoice);
+    }
+
+    @GetMapping("/invoices/{clientId}")
+    public ResponseEntity<Iterable<Invoice>> getInvoicesByClientId(@PathVariable Long clientId) {
+        Iterable<Invoice> invoices = billingServiceImpl.getInvoicesByClientId(clientId);
+        if (invoices == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(invoices);
     }
 }
