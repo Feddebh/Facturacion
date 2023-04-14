@@ -1,10 +1,5 @@
 package edu.coderhouse.jpa.models.entities;
 
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-import lombok.*;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +7,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import lombok.*;
 
 @Entity
 @Table(name = "products")
@@ -19,7 +18,6 @@ import javax.persistence.Table;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class Product {
 
   @Id
@@ -32,18 +30,15 @@ public class Product {
   @Pattern(regexp = "^[A-Za-z]+$")
   private String description;
 
-
   @Column(name = "code", length = 50)
   @NotNull(message = "No se admite un codigo de producto vacio.")
   @Pattern(regexp = "^[0-9]+$")
   private String code;
 
-
   @Column(name = "stock")
   @NotNull(message = "No se admite un stock de producto vacio")
   @Pattern(regexp = "^[0-9]+$")
   private Integer stock;
-
 
   @Column(name = "price")
   @NotNull(message = "No se admite un precio vacio.")

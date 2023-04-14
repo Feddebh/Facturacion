@@ -4,8 +4,7 @@ import edu.coderhouse.jpa.models.entities.Invoice;
 
 public interface BillingService {
 
+  Invoice createInvoice(Invoice invoice);
 
-    Invoice createInvoice(Invoice invoice);
-
-    Iterable<Invoice> getInvoicesByClientId(Long clientId);
+  Iterable<Invoice> getInvoicesByClientId(Long clientId);
 }

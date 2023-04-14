@@ -12,26 +12,25 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/invoices")
 public class BillingController {
 
-    @Autowired
-    private BillingService billingService;
+  @Autowired private BillingService billingService;
 
-    @PostMapping
-    public ResponseEntity<Invoice> createInvoice(@RequestBody PurchaseRequest purchaseRequest) {
-        Invoice createdInvoice = billingService.createInvoice(invoice);
-        if (createdInvoice == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdInvoice);
+  @PostMapping
+  public ResponseEntity<Invoice> createInvoice(@RequestBody PurchaseRequest purchaseRequest) {
+    Invoice createdInvoice = billingService.createInvoice(invoice);
+    if (createdInvoice == null) {
+      return ResponseEntity.badRequest().body(null);
     }
+    return ResponseEntity.status(HttpStatus.CREATED).body(createdInvoice);
+  }
 
-    @GetMapping("/{clientId}")
-    public ResponseEntity<Iterable<Invoice>> getInvoicesByClientId(@PathVariable Long clientId) {
-        Iterable<Invoice> invoices = billingService.getInvoicesByClientId(clientId);
-        if (invoices == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(invoices);
+  @GetMapping("/{clientId}")
+  public ResponseEntity<Iterable<Invoice>> getInvoicesByClientId(@PathVariable Long clientId) {
+    Iterable<Invoice> invoices = billingService.getInvoicesByClientId(clientId);
+    if (invoices == null) {
+      return ResponseEntity.notFound().build();
     }
+    return ResponseEntity.ok(invoices);
+  }
 }
 
 /*

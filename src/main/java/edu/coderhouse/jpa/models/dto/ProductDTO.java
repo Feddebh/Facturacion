@@ -3,14 +3,13 @@ package edu.coderhouse.jpa.models.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
-
 public class ProductDTO {
 
-    @JsonProperty("product_id")
+  @JsonProperty("product_id")
   private String productId;
 
-    private Integer amount;
-
+  private Integer amount;
 }

@@ -4,14 +4,13 @@ import edu.coderhouse.jpa.models.entities.Client;
 import java.util.List;
 
 public interface ClientService {
-Client addClient(Client candidateClient);
+  Client addClient(Client candidateClient);
 
-    void deleteClient(Long clientId);
+  void deleteClient(Long clientId);
 
-    List<Client> getAllClients();
+  List<Client> getAllClients();
 
+  Client getClientById(Long clientId);
 
-    Client getClientById(Long clientId);
-
-    Client updateCLient(Long clientId, Client updatedClient);
+  Client updateCLient(Long clientId, Client updatedClient);
 }

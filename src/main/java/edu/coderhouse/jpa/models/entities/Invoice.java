@@ -1,8 +1,5 @@
 package edu.coderhouse.jpa.models.entities;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -13,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "invoice")
@@ -38,10 +37,10 @@ public class Invoice {
     return new InvoiceDetail[0];
   }
 
- /*
-  Vamos a necesitarla en el futuro
-   @OneToMany(mappedBy = "invoice")
-   private Set<InvoiceDetail> invoiceDetails;
- */
+  /*
+   Vamos a necesitarla en el futuro
+    @OneToMany(mappedBy = "invoice")
+    private Set<InvoiceDetail> invoiceDetails;
+  */
 
 }
