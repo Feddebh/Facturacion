@@ -17,10 +17,25 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(gson.toJson(response), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<?> ProductNotFoundException(Exception e){
+        JsonObject response = new JsonObject();
+        response.addProperty("message", e.getMessage());
+        Gson gson = new Gson();
+        return new ResponseEntity<>(gson.toJson(response), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(NullParameterException.class)
     public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
         return ResponseEntity.badRequest().body
                 ("Se ha producido una excepción de tipo NullPointerException: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(ProductOutOfStockException.class)
+    public ResponseEntity<String> handleProductOutOfStockException(ProductOutOfStockException ex) {
+        // Puedes personalizar la respuesta de error según tus necesidades
+        String error = "Error: " + ex.getMessage();
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
 }
