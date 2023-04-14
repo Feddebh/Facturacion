@@ -3,7 +3,6 @@ package edu.coderhouse.jpa.service.impl;
 import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.models.entities.Invoice;
 import edu.coderhouse.jpa.models.entities.InvoiceDetail;
-import edu.coderhouse.jpa.models.entities.Product;
 import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.repository.InvoiceRepository;
 import edu.coderhouse.jpa.repository.ProductRepository;
@@ -23,6 +22,9 @@ public class BillingServiceImpl implements BillingService {
 
   @Autowired private ProductRepository productRepository;
 
+  @Autowired private InvoiceDetailServiceImpl invoiceDetailServiceImpl; // Inyectar la nueva clase
+
+
   @Override
   public Invoice createInvoice(Invoice invoice) {
 
@@ -32,31 +34,23 @@ public class BillingServiceImpl implements BillingService {
 
     // Verificar si el cliente existe
     if (client == null) {
-      return null;
+      return null; //No debe retornar null
     }
 
     // Configurar la fecha de creación de la factura
     invoice.setCreatedAt(LocalDateTime.now());
 
-    // Calcular el total de la factura
+// Calcular el total de la factura utilizando el nuevo servicio
     BigDecimal total = BigDecimal.ZERO;
     for (InvoiceDetail detail : invoice.getInvoiceDetails()) {
-      Long productId = detail.getProduct().getId();
-      Product product = productRepository.findById(productId).orElse(null);
-      if (product == null) {
-        return null;
-      }
-      BigDecimal price = product.getPrice();
-      Integer amount = detail.getAmount();
-      BigDecimal detailTotal = price.multiply(new BigDecimal(amount));
-      detail.setPrice(price);
+      BigDecimal detailTotal = invoiceDetailServiceImpl.calculateDetailTotal(detail);
+      detail.setPrice(detailTotal);
       total = total.add(detailTotal);
     }
     invoice.setTotal(total);
 
     // Guardar la factura en la base de datos
-    Invoice savedInvoice = invoiceRepository.save(invoice);
-    return savedInvoice;
+    return invoiceRepository.save(invoice);
   }
 
   @Override

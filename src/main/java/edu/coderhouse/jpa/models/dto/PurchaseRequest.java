@@ -12,3 +12,5 @@ public class PurchaseRequest {
   private String clientId;
   private List<ProductDTO> products;
 }
+//Esto me indica lo que le voy a pasar como cuerpo al postman para pedir la factura, el id de cliente y una lista de
+// product dto que contiene el producto que pidio y la cantidad.
