@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/invoices")
 public class BillingController {
@@ -15,8 +17,8 @@ public class BillingController {
   @Autowired private BillingService billingService;
 
   @PostMapping
-  public ResponseEntity<Invoice> createInvoice(@RequestBody PurchaseRequest purchaseRequest) {
-    Invoice createdInvoice = billingService.createInvoice(invoice);
+  public ResponseEntity<?> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) {
+    Invoice createdInvoice = billingService.createInvoice(purchaseRequest);
     if (createdInvoice == null) {
       return ResponseEntity.badRequest().body(null);
     }
@@ -35,7 +37,7 @@ public class BillingController {
 
 /*
 
-RECIBO UN PURCHASEREQUEST CON EL ID DEL CLIENTE Y UNA LISTA DE invoiceDetails,
+RECIBO UN PURCHASEREQUEST CON EL ID DEL CLIENTE Y UNA LISTA DE productDTO,
 
 {
   "client_id": 123456,

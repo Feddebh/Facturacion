@@ -10,6 +10,5 @@ public class ProductDTO {
 
   @JsonProperty("product_id")
   private String productId;
-
   private Integer amount;
 }

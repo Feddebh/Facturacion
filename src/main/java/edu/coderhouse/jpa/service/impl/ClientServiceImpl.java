@@ -19,8 +19,9 @@ public class ClientServiceImpl implements ClientService {
   public Client addClient(Client candidateClient) {
     if (candidateClient == null) {
       throw new NullParameterException("El parámetro candidateClient no puede ser nulo");
+    } else {
+      return clientRepository.save(candidateClient);
     }
-    return clientRepository.save(candidateClient);
   }
 
   @Override
