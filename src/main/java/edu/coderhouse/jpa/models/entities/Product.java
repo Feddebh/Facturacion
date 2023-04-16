@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import lombok.*;
 
@@ -27,7 +28,6 @@ public class Product {
   @Column(name = "description", length = 150)
   @NotNull(message = "No se admite una descripcion del producto vacia.")
   @Size(min = 2, max = 150)
-  @Pattern(regexp = "^[A-Za-z]+$")
   private String description;
 
   @Column(name = "code", length = 50)
@@ -37,11 +37,11 @@ public class Product {
 
   @Column(name = "stock")
   @NotNull(message = "No se admite un stock de producto vacio")
-  @Pattern(regexp = "^[0-9]+$")
+  @Positive
   private Integer stock;
 
   @Column(name = "price")
   @NotNull(message = "No se admite un precio vacio.")
-  @Pattern(regexp = "^[0-9]*\\.?[0-9]*$", message = "El precio ingresado no es válido")
+  @Positive
   private BigDecimal price;
 }

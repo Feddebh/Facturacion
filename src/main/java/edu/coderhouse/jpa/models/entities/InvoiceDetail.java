@@ -10,6 +10,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +29,7 @@ public class InvoiceDetail {
 
   @ManyToOne
   @JoinColumn(name = "invoice_id")
+  @JsonIgnore
   private Invoice invoice;
 
   @Column(name = "amount", nullable = false)
@@ -38,6 +42,7 @@ public class InvoiceDetail {
   @Column(name = "subtotal", nullable = false)
   private BigDecimal subtotal;
 
-  @Column(name = "price", nullable = false)
-  private BigDecimal price;
+  @JsonProperty("applied_price")
+  @Column(name = "applied_price", nullable = false)
+  private BigDecimal appliedPrice;
 }

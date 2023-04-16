@@ -35,7 +35,7 @@ public class InvoiceDetailServiceImpl implements InvoiceDetailService {
             detail.setInvoice(invoice);
             detail.setProduct(product);
             detail.setAmount(amount);
-            detail.setPrice(product.getPrice());
+            detail.setAppliedPrice(product.getPrice());
         }
         // Calcular el total de la factura
         BigDecimal price = product.getPrice();

@@ -17,7 +17,7 @@ public class BillingController {
   @Autowired private BillingService billingService;
 
   @PostMapping(consumes = "application/json", produces = "application/json")
-  public ResponseEntity<?> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) {
+  public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) {
     Invoice createdInvoice = billingService.createInvoice(purchaseRequest);
     if (createdInvoice == null) {
       return ResponseEntity.badRequest().body(null);

@@ -14,6 +14,8 @@ import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.BillingService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.coderhouse.jpa.service.InvoiceDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,9 @@ public class BillingServiceImpl implements BillingService {
       }
 
       BigDecimal  invoiceTotal = new BigDecimal(0);
+
+    List<InvoiceDetail> savedDetails = new ArrayList<>();
+
       for(ProductDTO productDTO : purchaseRequest.getPurchaseDetails()){
 
         Product product = productRepository.findById(productDTO.getProductId()).orElseThrow(() ->
@@ -67,22 +72,25 @@ public class BillingServiceImpl implements BillingService {
         InvoiceDetail detail = new InvoiceDetail();
         detail.setInvoice(savedInvoice);
         detail.setAmount(productDTO.getAmount());
-        detail.setPrice(product.getPrice());
+        detail.setAppliedPrice(product.getPrice());
         detail.setProduct(product);
-        detail.setSubtotal(detail.getPrice().multiply(new BigDecimal(detail.getAmount())));
+        detail.setSubtotal(detail.getAppliedPrice().multiply(new BigDecimal(detail.getAmount())));
 
         invoiceDetailService.saveInvoiceDetail(detail);
+        System.out.println("antes " + invoiceTotal);
         invoiceTotal = invoiceTotal.add(detail.getSubtotal());
+        savedDetails.add(detail);
+        System.out.println("despues: " + invoiceTotal);
+        product.setStock(product.getStock() - productDTO.getAmount());
 
-        System.out.println("EL SUBTOTAL ES: " + invoiceTotal);
+        productRepository.save(product);
       }
 
-      savedInvoice.setTotal(invoiceTotal);
+    savedInvoice.setTotal(invoiceTotal);
+      savedInvoice.setInvoiceDetails(savedDetails);
 
-
-
-      // Guardar la factura en la base de datos
-      return savedInvoice;
+    // Guardar la factura en la base de datos
+    return invoiceRepository.save(savedInvoice);
     }
 
   @Override
