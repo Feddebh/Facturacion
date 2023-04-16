@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/invoices")
+@RequestMapping("/v1/billing")
 public class BillingController {
 
   @Autowired private BillingService billingService;
 
-  @PostMapping
+  @PostMapping(consumes = "application/json", produces = "application/json")
   public ResponseEntity<?> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) {
     Invoice createdInvoice = billingService.createInvoice(purchaseRequest);
     if (createdInvoice == null) {
@@ -37,7 +37,7 @@ public class BillingController {
 
 /*
 
-RECIBO UN PURCHASEREQUEST CON EL ID DEL CLIENTE Y UNA LISTA DE productDTO,
+mando UN PURCHASEREQUEST CON EL ID DEL CLIENTE Y UNA LISTA DE productDTO,
 
 {
   "client_id": 123456,

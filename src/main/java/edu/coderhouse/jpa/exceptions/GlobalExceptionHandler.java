@@ -3,6 +3,7 @@ package edu.coderhouse.jpa.exceptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,9 +33,10 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(ProductOutOfStockException.class)
-  public ResponseEntity<String> handleProductOutOfStockException(ProductOutOfStockException ex) {
-    // Puedes personalizar la respuesta de error según tus necesidades
-    String error = "Error: " + ex.getMessage();
-    return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+  public ResponseEntity<String> ProductOutOfStockException(Exception e) {
+    JsonObject response = new JsonObject();
+    response.addProperty("message", e.getMessage());
+    Gson gson = new Gson();
+    return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(gson.toJson(response));
   }
 }

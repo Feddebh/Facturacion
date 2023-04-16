@@ -35,6 +35,9 @@ public class InvoiceDetail {
   @JoinColumn(name = "product_id")
   private Product product;
 
+  @Column(name = "subtotal", nullable = false)
+  private BigDecimal subtotal;
+
   @Column(name = "price", nullable = false)
   private BigDecimal price;
 }

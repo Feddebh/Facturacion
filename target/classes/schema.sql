@@ -32,8 +32,9 @@ CREATE TABLE IF NOT EXISTS invoice_details
 (
     invoice_detail_id INT NOT NULL AUTO_INCREMENT,
     invoice_id INT,
-    total DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
     price DECIMAL(10,2) NOT NULL,
+    amount INT NOT NULL,
     product_id INT NOT NULL,
     PRIMARY KEY (invoice_detail_id),
     FOREIGN KEY (product_id) REFERENCES products(id)

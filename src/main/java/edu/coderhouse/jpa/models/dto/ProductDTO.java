@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
 
   @JsonProperty("product_id")
-  private String productId;
+  private Long productId;
   private Integer amount;
 }

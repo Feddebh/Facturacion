@@ -9,9 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
 
 @Entity
 @Table(name = "invoice")
@@ -26,7 +28,7 @@ public class Invoice {
   @Column(name = "created_at", nullable = false)
   private LocalDateTime createdAt;
 
-  @Column(name = "total", nullable = false)
+  @Column(name = "total")
   private BigDecimal total;
 
   @ManyToOne
@@ -37,10 +39,8 @@ public class Invoice {
     return new InvoiceDetail[0];
   }
 
-  /*
-   Vamos a necesitarla en el futuro
     @OneToMany(mappedBy = "invoice")
-    private Set<InvoiceDetail> invoiceDetails;
-  */
+    private List<InvoiceDetail> invoiceDetails;
+
 
 }
