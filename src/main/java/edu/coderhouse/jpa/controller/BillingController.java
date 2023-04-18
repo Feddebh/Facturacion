@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
@@ -17,6 +18,7 @@ public class BillingController {
   @Autowired private BillingService billingService;
 
   @PostMapping(consumes = "application/json", produces = "application/json")
+  @Transactional
   public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) {
     Invoice createdInvoice = billingService.createInvoice(purchaseRequest);
     if (createdInvoice == null) {

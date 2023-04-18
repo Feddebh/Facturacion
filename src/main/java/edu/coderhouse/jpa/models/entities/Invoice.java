@@ -3,9 +3,6 @@ package edu.coderhouse.jpa.models.entities;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.*;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +31,7 @@ public class Invoice {
   @JoinColumn(name = "client_id")
   private Client client;
 
-  @OneToMany(mappedBy = "invoice", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
   private List<InvoiceDetail> invoiceDetails;
 
 }
