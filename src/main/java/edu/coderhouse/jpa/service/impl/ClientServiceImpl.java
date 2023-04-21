@@ -8,7 +8,7 @@ import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.service.ClientService;
 import java.util.List;
 import java.util.Optional;
-import edu.coderhouse.jpa.validations.ClientValidator;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,27 +17,17 @@ import org.springframework.stereotype.Service;
 public class ClientServiceImpl implements ClientService {
 
   @Autowired private ClientRepository clientRepository;
-  @Autowired private ClientValidator clientValidator;
 
   @Override
   public Client findByDocnumber(String docNumber) throws BillingException {
-    this.clientValidator.validateDocNumber(docNumber);
-
     return this.clientRepository.findByDocNumber(docNumber)
             .orElseThrow(() -> new BillingException("RESOURCE.NOT.FOUND"));
   }
   @Override
-  public Client addClient(Client client) throws BillingException {
-    log.info("NUEVO CLIENTE " + client);
-    this.clientValidator.validate(client);
-
-    Optional<Client> clientInDb = this.clientRepository.findByDocNumber(client.getDocNumber());
-    if (clientInDb.isPresent()) {
-      throw new BillingException("RESOURCE.ALREADY.EXISTS");
-    }
+  public Client addClient(Client client) {
+    log.info("NUEVO CLIENTE: " + client);
       return clientRepository.save(client);
     }
-
 
   @Override
   public List<Client> getAllClients() {
@@ -45,18 +35,17 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public Client getClientById(Long clientId) {
-    Optional<Client> optionalClient = clientRepository.findById(clientId);
-    if (optionalClient.isPresent()) {
-      return optionalClient.get();
-    } else {
-
-      throw new ClientNotFoundException("No se encuentra el cliente con ID: " + clientId);
+  public Client getClientById(Long clientId) throws BillingException{
+    if (clientId <= 0){
+      throw new BillingException("EL ID INGRESADO NO ES VALIDO");
     }
+    return this.clientRepository.findById(clientId).
+            orElseThrow(() -> new BillingException("El ID especificado (aun) no existe."));
   }
 
   @Override
-  public Client updateCLient(Long clientId, Client updatedClient) {
+  public Client updatedCLient(Long clientId, Client client) throws BillingException {
+    Client clientInDb
 
     if (clientId == null) {
       throw new NullParameterException("El parametro Id del cliente no puede ser null");
@@ -70,7 +59,7 @@ public class ClientServiceImpl implements ClientService {
         existingClient.setDocNumber(updatedClient.getDocNumber());
         return clientRepository.save(existingClient);
       }
-      return null;
+      return null; //hacer este
     }
   }
 }

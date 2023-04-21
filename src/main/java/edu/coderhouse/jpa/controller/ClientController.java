@@ -41,7 +41,7 @@ public class ClientController {
       @PathVariable Long clientId, @Valid @RequestBody ClientDTO updatedClientDTO) {
     log.info("CLIENTE ACTUALIZADO " + updatedClientDTO);
     Client updatedClient = this.clientMapper.clientDtoToClient(updatedClientDTO);
-    Client updated = this.clientService.updateCLient(clientId, updatedClient);
+    Client updated = this.clientService.updatedCLient()CLient(clientId, updatedClient);
     return ResponseEntity.ok(this.clientMapper.clientToClientDTO(updated));
   }
 

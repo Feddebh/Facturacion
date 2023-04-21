@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,21 +23,17 @@ public class Client {
   private Long id;
 
   @Column(name = "name", length = 75)
-  @NotBlank(message = "No se admite un nombre vacio.")
-  @Size(min = 2, max = 50)
-  @Pattern(regexp = "^[A-Za-z]+$")
+  @Size(min = 2, max = 50, message = "El campo 'nombre' admite entre 2 y 50 caracteres")
+  @Pattern(regexp = "^[A-Za-z]+$", message = "Ha ingresado un caracter invalido ")
   private String name;
 
   @Column(name = "lastname", length = 75)
-  @NotBlank(message = "No se admite un apellido vacio.")
-  @Size(min = 2, max = 50)
+  @Size(min = 2, max = 50, message = "El campo 'apellido' admite entre 2 y 50 caracteres")
   @Pattern(regexp = "^[A-Za-z]+$")
   private String lastName;
 
   @Column(unique = true, name = "docNumber", length = 11)
-  @NotBlank(message = "No se admite un DNI vacio.")
+  @Size(min = 2, max = 11, message = "El DNI debe tener entre 2 y 11 caracteres.")
   @Pattern(regexp = "^[0-9]+$")
   private String docNumber;
-
-
 }

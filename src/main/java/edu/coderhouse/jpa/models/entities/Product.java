@@ -7,11 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
-
+import javax.validation.constraints.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -28,12 +24,11 @@ public class Product {
   private Long id;
 
   @Column(name = "description", length = 150)
-  @NotNull(message = "No se admite una descripcion del producto vacia.")
-  @Size(min = 2, max = 150)
+  @Size(min = 2, max = 150, message = "El formato ingresado es incompatible o nulo")
   private String description;
 
-  @Column(name = "code", length = 50)
-  @NotNull(message = "No se admite un codigo de producto vacio.")
+  @Column(unique = true, name = "code", length = 50)
+  @Size(min = 2, max=50, message = "El formato ingresado es incompatible o nulo.")
   @Pattern(regexp = "^[0-9]+$")
   private String code;
 
@@ -41,7 +36,6 @@ public class Product {
   @Column(name = "stock")
   @NotNull(message = "No se admite un stock de producto vacio")
   @Positive
-  //La siguiente anotacion nos permite que el stock se modifique en la bdd pero no se incluya en el cuerpo de respuesta.
   @JsonIgnore
   private Integer stock;
 
