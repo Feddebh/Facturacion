@@ -15,6 +15,7 @@
 	<description>Proyecto para aprender JPA</description>
 	<properties>
 		<java.version>11</java.version>
+		<org.mapstruct.version>1.5.4.Final</org.mapstruct.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -54,8 +55,6 @@
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-
-
 		<dependency>
 				<groupId>org.projectlombok</groupId>
 				<artifactId>lombok</artifactId>
@@ -67,10 +66,46 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.9</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+
+
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>11</source>
+					<!--  depending on your project  -->
+					<target>11</target>
+					<!--  depending on your project  -->
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
+						</path>
+						<!--  other annotation processors  -->
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 				<plugin>
 					<groupId>com.coveo</groupId>
 					<artifactId>fmt-maven-plugin</artifactId>
@@ -89,5 +124,10 @@
 			</plugin>
 		</plugins>
 	</build>
-
+	<repositories>
+		<repository>
+			<id>mapstruct</id>
+			<url>https://oss.sonatype.org/content/repositories/releases</url>
+		</repository>
+	</repositories>
 </project>

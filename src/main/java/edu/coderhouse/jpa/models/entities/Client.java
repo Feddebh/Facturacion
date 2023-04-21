@@ -15,10 +15,8 @@ import lombok.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "clients")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
+
 public class Client {
 
   @Id
@@ -41,4 +39,6 @@ public class Client {
   @NotBlank(message = "No se admite un DNI vacio.")
   @Pattern(regexp = "^[0-9]+$")
   private String docNumber;
+
+
 }

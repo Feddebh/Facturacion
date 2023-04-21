@@ -12,7 +12,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +41,6 @@ public class InvoiceDetail {
   @Column(name = "subtotal", nullable = false)
   private BigDecimal subtotal;
 
-  @JsonProperty("applied_price")
   @Column(name = "applied_price", nullable = false)
   private BigDecimal appliedPrice;
 }

@@ -11,6 +11,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 @Entity
@@ -35,9 +37,12 @@ public class Product {
   @Pattern(regexp = "^[0-9]+$")
   private String code;
 
+
   @Column(name = "stock")
   @NotNull(message = "No se admite un stock de producto vacio")
   @Positive
+  //La siguiente anotacion nos permite que el stock se modifique en la bdd pero no se incluya en el cuerpo de respuesta.
+  @JsonIgnore
   private Integer stock;
 
   @Column(name = "price")

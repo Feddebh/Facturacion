@@ -1,12 +1,13 @@
 package edu.coderhouse.jpa.service;
 
+import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.models.entities.Client;
 import java.util.List;
 
 public interface ClientService {
-  Client addClient(Client candidateClient);
+  Client findByDocnumber(String docnumber) throws BillingException;
 
-  void deleteClient(Long clientId);
+  Client addClient(Client candidateClient) throws BillingException;
 
   List<Client> getAllClients();
 

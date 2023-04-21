@@ -1,5 +1,6 @@
 package edu.coderhouse.jpa.service.impl;
 
+import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.exceptions.ClientNotFoundException;
 import edu.coderhouse.jpa.exceptions.NullParameterException;
 import edu.coderhouse.jpa.models.entities.Client;
@@ -7,27 +8,36 @@ import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.service.ClientService;
 import java.util.List;
 import java.util.Optional;
+import edu.coderhouse.jpa.validations.ClientValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+@Slf4j
 @Service
 public class ClientServiceImpl implements ClientService {
 
   @Autowired private ClientRepository clientRepository;
+  @Autowired private ClientValidator clientValidator;
 
   @Override
-  public Client addClient(Client candidateClient) {
-    if (candidateClient == null) {
-      throw new NullParameterException("El parámetro candidateClient no puede ser nulo");
-    } else {
-      return clientRepository.save(candidateClient);
+  public Client findByDocnumber(String docNumber) throws BillingException {
+    this.clientValidator.validateDocNumber(docNumber);
+
+    return this.clientRepository.findByDocNumber(docNumber)
+            .orElseThrow(() -> new BillingException("RESOURCE.NOT.FOUND"));
+  }
+  @Override
+  public Client addClient(Client client) throws BillingException {
+    log.info("NUEVO CLIENTE " + client);
+    this.clientValidator.validate(client);
+
+    Optional<Client> clientInDb = this.clientRepository.findByDocNumber(client.getDocNumber());
+    if (clientInDb.isPresent()) {
+      throw new BillingException("RESOURCE.ALREADY.EXISTS");
     }
-  }
+      return clientRepository.save(client);
+    }
 
-  @Override
-  public void deleteClient(Long clientId) {
-    clientRepository.deleteById(clientId);
-  }
 
   @Override
   public List<Client> getAllClients() {

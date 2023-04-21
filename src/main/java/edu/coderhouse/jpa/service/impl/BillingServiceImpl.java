@@ -52,13 +52,16 @@ public class BillingServiceImpl implements BillingService {
       BigDecimal total = BigDecimal.ZERO;
       Invoice savedInvoice = invoiceRepository.save(invoice);
 
+      try {
       for (ProductDTO productDTO : purchaseRequest.getPurchaseDetails()){
-
         Product product = productRepository.findById(productDTO.getProductId()).orElseThrow(() ->
                 new NullParameterException("El parámetro candidateClient no puede ser nulo"));
         if (product.getStock() < productDTO.getAmount()){
           throw new ProductOutOfStockException("No hay suficiente stock");
         }
+      }
+      } catch (ProductOutOfStockException e){
+        System.out.println("No hay suficiente stock para este pedido.");
       }
 
       BigDecimal  invoiceTotal = new BigDecimal(0);
