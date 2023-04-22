@@ -13,5 +13,5 @@ public interface ClientService {
 
   Client getClientById(Long clientId) throws BillingException;
 
-  Client updatedCLient(Long clientId, Client updatedClient) throws BillingException;
+  Client updateClient(Long clientId, Client updatedClient) throws BillingException;
 }

@@ -1,4 +1,4 @@
-package edu.coderhouse.jpa.controller;
+package edu.coderhouse.jpa.controllers;
 
 import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.mappers.ProductMapper;

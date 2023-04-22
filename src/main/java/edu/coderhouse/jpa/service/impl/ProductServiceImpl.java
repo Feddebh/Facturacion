@@ -19,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
   private ProductRepository productRepository;
 
   @Autowired
-  private Productva
+
 
   @Override
   public Product addProduct(Product candidateProduct) {

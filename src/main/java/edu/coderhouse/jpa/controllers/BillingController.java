@@ -1,4 +1,4 @@
-package edu.coderhouse.jpa.controller;
+package edu.coderhouse.jpa.controllers;
 
 import edu.coderhouse.jpa.models.dto.PurchaseRequest;
 import edu.coderhouse.jpa.models.entities.Invoice;
