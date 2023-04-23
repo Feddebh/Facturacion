@@ -21,15 +21,11 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({BillingException.class, Exception.class, ConstraintViolationException.class})
   public ResponseEntity<ErrorResponse> billingException(BillingException e) {
     ErrorResponse errorResponse = new ErrorResponse();
-
+    System.out.println("LLEGUE HASTA ACA");
     errorResponse.setStatusCode(
-        Integer.parseInt(
-            this.messageSource.getMessage(
-                e.getMessage() + ".STATUSCODE", null, Locale.getDefault())));
-    errorResponse.setStatus(
-        this.messageSource.getMessage(e.getMessage() + ".STATUS", null, Locale.getDefault()));
-    errorResponse.setMessage(
-        this.messageSource.getMessage(e.getMessage() + ".MESSAGE", null, Locale.getDefault()));
+       e.getStatusCode().value());
+
+    errorResponse.setMessage(e.getMessage());
 
     return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatusCode()));
   }
