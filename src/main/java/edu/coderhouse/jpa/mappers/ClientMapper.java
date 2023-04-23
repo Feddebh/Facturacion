@@ -8,11 +8,9 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ClientMapper {
-    ClientDTO clientToClientDTO(Client client);
+  ClientDTO clientToClientDTO(Client client);
 
-    Client clientDtoToClient(ClientDTO clientDTO);
+  Client clientDtoToClient(ClientDTO clientDTO);
 
-    void updateClientFromDTO(ClientDTO clientDTO, @MappingTarget Client client);
+  void updateClientFromDTO(ClientDTO clientDTO, @MappingTarget Client client);
 }
-
-

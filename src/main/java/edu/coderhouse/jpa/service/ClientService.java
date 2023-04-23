@@ -3,15 +3,13 @@ package edu.coderhouse.jpa.service;
 import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.models.dto.ClientDTO;
 import edu.coderhouse.jpa.models.entities.Client;
-
-import javax.validation.Valid;
 import java.util.List;
+import javax.validation.Valid;
 
 public interface ClientService {
   Client findByDocNumber(String docNumber) throws BillingException;
 
   Client addClient(@Valid ClientDTO client) throws BillingException;
-
 
   List<Client> getAllClients();
 

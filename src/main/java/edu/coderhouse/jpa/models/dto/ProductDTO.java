@@ -1,11 +1,11 @@
 package edu.coderhouse.jpa.models.dto;
 
-import lombok.Data;
+import java.math.BigDecimal;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
-import java.math.BigDecimal;
+import lombok.Data;
 
 @Data
 public class ProductDTO {
@@ -17,7 +17,7 @@ public class ProductDTO {
   private String description;
 
   @NotNull(message = "El código no puede ser nulo")
-  @Size(min = 2, max=50, message = "El formato ingresado es incompatible o nulo.")
+  @Size(min = 2, max = 50, message = "El formato ingresado es incompatible o nulo.")
   @Pattern(regexp = "^[0-9]+$", message = "El código solo debe contener números")
   private String code;
 
@@ -28,5 +28,4 @@ public class ProductDTO {
   @NotNull(message = "El precio no puede ser nulo.")
   @Positive(message = "El precio debe ser un número positivo")
   private BigDecimal price;
-
 }

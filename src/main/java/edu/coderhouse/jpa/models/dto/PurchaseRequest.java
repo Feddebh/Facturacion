@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PurchaseRequest {
   @JsonProperty("client_id")
-  private String clientId;
+  private Long clientId;
+
   @JsonProperty("purchase_details")
   private List<ProductAmountDTO> purchaseDetails;
 }
-//Esto me indica lo que le voy a pasar como cuerpo al postman para pedir la factura, el "Id" de cliente y una lista de
-// product DTO que contiene el producto que pidió y la cantidad.

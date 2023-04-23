@@ -2,7 +2,6 @@ package edu.coderhouse.jpa.service.impl;
 
 import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.models.dto.ProductAmountDTO;
-import edu.coderhouse.jpa.models.dto.ProductDTO;
 import edu.coderhouse.jpa.models.dto.PurchaseRequest;
 import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.models.entities.Invoice;
@@ -12,88 +11,83 @@ import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.repository.InvoiceRepository;
 import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.BillingService;
+import edu.coderhouse.jpa.service.InvoiceDetailService;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.coderhouse.jpa.service.InvoiceDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class BillingServiceImpl implements BillingService {
 
-  @Autowired private InvoiceRepository invoiceRepository;
+  private final InvoiceRepository invoiceRepository;
 
-  @Autowired private ClientRepository clientRepository;
+  private final ClientRepository clientRepository;
 
-  @Autowired private InvoiceDetailService invoiceDetailService;
+  private final InvoiceDetailService invoiceDetailService;
 
-  @Autowired private ProductRepository productRepository;
-
+  private final ProductRepository productRepository;
 
   @Override
   public Invoice createInvoice(PurchaseRequest purchaseRequest) throws BillingException {
 
     // Obtener el cliente de la base de datos por su id
-    Long clientId = Long.parseLong(purchaseRequest.getClientId());
-    Client client = clientRepository.findById(clientId).orElseThrow(() -> new BillingException
-            ("El parámetro candidateClient no puede ser nulo"));
+    Long clientId = purchaseRequest.getClientId();
+    Client client =
+        clientRepository
+            .findById(clientId)
+            .orElseThrow(() -> new BillingException("NO SE PUDO ENCONTRAR EL CLIENTE", HttpStatus.NOT_FOUND));
 
     // Verificar si el cliente existe
-      // Configurar la fecha de creación de la factura
-      Invoice invoice = new Invoice();
-      invoice.setCreatedAt(LocalDateTime.now());
-      invoice.setClient(client);
+    // Configurar la fecha de creación de la factura
+    Invoice invoice = new Invoice();
+    invoice.setCreatedAt(LocalDateTime.now());
+    invoice.setClient(client);
 
-// Calcular el total de la factura utilizando el nuevo servicio
-      BigDecimal total = BigDecimal.ZERO;
-      Invoice savedInvoice = invoiceRepository.save(invoice);
+    Invoice savedInvoice = invoiceRepository.save(invoice);
 
-      for (ProductAmountDTO productAmountDTO : purchaseRequest.getPurchaseDetails()){
-        Product product = productRepository.findById(productAmountDTO.getProductId()).orElseThrow(() ->
-                new BillingException("El parámetro candidateClient no puede ser nulo"));
-        if (product.getStock() < productAmountDTO.getAmount()){
-          throw new BillingException("No hay suficiente stock");
-        }
-      }
-
-      BigDecimal  invoiceTotal = new BigDecimal(0);
+    BigDecimal invoiceTotal = new BigDecimal(0);
 
     List<InvoiceDetail> savedDetails = new ArrayList<>();
 
-      for(ProductAmountDTO productAmountDTO : purchaseRequest.getPurchaseDetails()){
+    for (ProductAmountDTO productAmountDTO : purchaseRequest.getPurchaseDetails()) {
 
-        Product product = productRepository.findById(productAmountDTO.getProductId()).orElseThrow(() ->
-                new BillingException("El parámetro candidateClient no puede ser nulo"));
-        InvoiceDetail detail = new InvoiceDetail();
-        detail.setInvoice(savedInvoice);
-        detail.setAmount(productAmountDTO.getAmount());
-        detail.setAppliedPrice(product.getPrice());
-        detail.setProduct(product);
-        detail.setSubtotal(detail.getAppliedPrice().multiply(new BigDecimal(detail.getAmount())));
+      Long productId = productAmountDTO.getProductId();
+      Product product =
+          productRepository
+              .findById(productId)
+              .orElseThrow(
+                  () -> new BillingException("EL PRODUCTO: " + productId + " NO FUE ENCONTRADO", HttpStatus.NOT_FOUND));
 
-        invoiceDetailService.saveInvoiceDetail(detail);
-        System.out.println("antes " + invoiceTotal);
-        invoiceTotal = invoiceTotal.add(detail.getSubtotal());
-        savedDetails.add(detail);
-        System.out.println("despues: " + invoiceTotal);
-        product.setStock(product.getStock() - productAmountDTO.getAmount());
+      InvoiceDetail detail = new InvoiceDetail();
+      detail.setInvoice(savedInvoice);
+      detail.setAmount(productAmountDTO.getAmount());
+      detail.setAppliedPrice(product.getPrice());
+      detail.setProduct(product);
+      detail.setSubtotal(detail.getAppliedPrice().multiply(new BigDecimal(detail.getAmount())));
 
-        productRepository.save(product);
-      }
+      invoiceDetailService.saveInvoiceDetail(detail);
+      invoiceTotal = invoiceTotal.add(detail.getSubtotal());
+      savedDetails.add(detail);
+      product.setStock(product.getStock() - productAmountDTO.getAmount());
+
+      productRepository.save(product);
+    }
 
     savedInvoice.setTotal(invoiceTotal);
-      savedInvoice.setInvoiceDetails(savedDetails);
+    savedInvoice.setInvoiceDetails(savedDetails);
 
     // Guardar la factura en la base de datos
     return invoiceRepository.save(savedInvoice);
-    }
+  }
 
   @Override
-  public Iterable<Invoice> getInvoicesByClientId(Long clientId) {
+  public List<Invoice> getInvoicesByClientId(Long clientId) {
 
     // Obtener el cliente de la base de datos por su id
     Client client = clientRepository.findById(clientId).orElse(null);
@@ -104,7 +98,7 @@ public class BillingServiceImpl implements BillingService {
     }
 
     // Obtener las facturas del cliente
-    Iterable<Invoice> invoices = invoiceRepository.findByClient(client);
+    List<Invoice> invoices = invoiceRepository.findByClient(client);
 
     // Retornar las facturas del cliente en el cuerpo de la respuesta
     return ResponseEntity.ok(invoices).getBody();

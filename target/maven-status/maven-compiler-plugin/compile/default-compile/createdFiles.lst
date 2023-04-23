@@ -1,6 +1,4 @@
-edu/coderhouse/jpa/models/dto/PurchaseResponse.class
 edu/coderhouse/jpa/service/impl/ClientServiceImpl.class
-edu/coderhouse/jpa/controller/ProductController.class
 edu/coderhouse/jpa/models/dto/ProductDTO.class
 edu/coderhouse/jpa/models/entities/Product.class
 edu/coderhouse/jpa/service/impl/ProductServiceImpl.class
@@ -9,7 +7,6 @@ edu/coderhouse/jpa/JpaApplication.class
 edu/coderhouse/jpa/repository/ClientRepository.class
 edu/coderhouse/jpa/models/dto/PurchaseRequest.class
 edu/coderhouse/jpa/models/entities/Client.class
-edu/coderhouse/jpa/exceptions/ClientNotFoundException.class
 edu/coderhouse/jpa/service/ProductService.class
 edu/coderhouse/jpa/service/ClientService.class
 edu/coderhouse/jpa/exceptions/GlobalExceptionHandler.class

@@ -1,5 +1,6 @@
 package edu.coderhouse.jpa.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,14 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "clients")
 @Data
-
 public class Client {
 
   @Id

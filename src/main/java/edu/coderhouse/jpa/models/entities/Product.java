@@ -1,5 +1,6 @@
 package edu.coderhouse.jpa.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.*;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 @Entity
@@ -29,10 +28,9 @@ public class Product {
   private String description;
 
   @Column(unique = true, name = "code", length = 50)
-  @Size(min = 2, max=50, message = "El formato ingresado es incompatible o nulo.")
+  @Size(min = 2, max = 50, message = "El formato ingresado es incompatible o nulo.")
   @Pattern(regexp = "^[0-9]+$")
   private String code;
-
 
   @Column(name = "stock")
   @NotNull(message = "No se admite un stock de producto vacio")

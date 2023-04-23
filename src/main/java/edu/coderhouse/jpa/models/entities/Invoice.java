@@ -2,12 +2,12 @@ package edu.coderhouse.jpa.models.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.List;
 
 @Entity
 @Table(name = "invoice")
@@ -33,5 +33,4 @@ public class Invoice {
 
   @OneToMany(mappedBy = "invoice", fetch = FetchType.LAZY)
   private List<InvoiceDetail> invoiceDetails;
-
 }

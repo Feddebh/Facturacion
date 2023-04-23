@@ -1,10 +1,15 @@
 package edu.coderhouse.jpa.exceptions;
 
-public class BillingException extends Exception{
+import lombok.Data;
+import org.springframework.http.HttpStatus;
 
-    public BillingException(String msg){
-        super(msg);
-    }
+@Data
+public class BillingException extends Exception {
 
+  private final HttpStatus statusCode;
 
+  public BillingException(String msg, HttpStatus statusCode) {
+    super(msg);
+    this.statusCode = statusCode;
+  }
 }
