@@ -1,6 +1,7 @@
 package edu.coderhouse.jpa.service.impl;
 
 import edu.coderhouse.jpa.exceptions.BillingException;
+import edu.coderhouse.jpa.models.dto.ProductAmountDTO;
 import edu.coderhouse.jpa.models.dto.ProductDTO;
 import edu.coderhouse.jpa.models.dto.PurchaseRequest;
 import edu.coderhouse.jpa.models.entities.Client;
@@ -51,29 +52,25 @@ public class BillingServiceImpl implements BillingService {
       BigDecimal total = BigDecimal.ZERO;
       Invoice savedInvoice = invoiceRepository.save(invoice);
 
-      try {
-      for (ProductDTO productDTO : purchaseRequest.getPurchaseDetails()){
-        Product product = productRepository.findById(productDTO.getProductId()).orElseThrow(() ->
-                new NullParameterException("El parámetro candidateClient no puede ser nulo"));
-        if (product.getStock() < productDTO.getAmount()){
-          throw new ProductOutOfStockException("No hay suficiente stock");
+      for (ProductAmountDTO productAmountDTO : purchaseRequest.getPurchaseDetails()){
+        Product product = productRepository.findById(productAmountDTO.getProductId()).orElseThrow(() ->
+                new BillingException("El parámetro candidateClient no puede ser nulo"));
+        if (product.getStock() < productAmountDTO.getAmount()){
+          throw new BillingException("No hay suficiente stock");
         }
-      }
-      } catch (ProductOutOfStockException e){
-        System.out.println("No hay suficiente stock para este pedido.");
       }
 
       BigDecimal  invoiceTotal = new BigDecimal(0);
 
     List<InvoiceDetail> savedDetails = new ArrayList<>();
 
-      for(ProductDTO productDTO : purchaseRequest.getPurchaseDetails()){
+      for(ProductAmountDTO productAmountDTO : purchaseRequest.getPurchaseDetails()){
 
-        Product product = productRepository.findById(productDTO.getProductId()).orElseThrow(() ->
-                new NullParameterException("El parámetro candidateClient no puede ser nulo"));
+        Product product = productRepository.findById(productAmountDTO.getProductId()).orElseThrow(() ->
+                new BillingException("El parámetro candidateClient no puede ser nulo"));
         InvoiceDetail detail = new InvoiceDetail();
         detail.setInvoice(savedInvoice);
-        detail.setAmount(productDTO.getAmount());
+        detail.setAmount(productAmountDTO.getAmount());
         detail.setAppliedPrice(product.getPrice());
         detail.setProduct(product);
         detail.setSubtotal(detail.getAppliedPrice().multiply(new BigDecimal(detail.getAmount())));
@@ -83,7 +80,7 @@ public class BillingServiceImpl implements BillingService {
         invoiceTotal = invoiceTotal.add(detail.getSubtotal());
         savedDetails.add(detail);
         System.out.println("despues: " + invoiceTotal);
-        product.setStock(product.getStock() - productDTO.getAmount());
+        product.setStock(product.getStock() - productAmountDTO.getAmount());
 
         productRepository.save(product);
       }

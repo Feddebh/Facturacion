@@ -1,19 +1,32 @@
 package edu.coderhouse.jpa.models.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
-import java.io.Serializable;
-@JsonIgnoreProperties(ignoreUnknown = true)
+import javax.validation.constraints.Size;
+import java.math.BigDecimal;
+
 @Data
+public class ProductDTO {
 
-public class ProductDTO implements Serializable {
-
-  @JsonProperty("product_id")
   private Long productId;
 
-  @Positive(message = "El Stock No se puede ser negativo")
-  private Integer amount;
+  @NotNull(message = "La descripción del producto no puede ser nula")
+  @Size(min = 2, max = 150, message = "El formato ingresado es incompatible o nulo")
+  private String description;
+
+  @NotNull(message = "El código no puede ser nulo")
+  @Size(min = 2, max=50, message = "El formato ingresado es incompatible o nulo.")
+  @Pattern(regexp = "^[0-9]+$", message = "El código solo debe contener números")
+  private String code;
+
+  @NotNull(message = "El stock no puede ser nulo")
+  @Positive(message = "El stock debe ser un número positivo")
+  private Integer stock;
+
+  @NotNull(message = "El precio no puede ser nulo.")
+  @Positive(message = "El precio debe ser un número positivo")
+  private BigDecimal price;
+
 }

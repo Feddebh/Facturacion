@@ -27,15 +27,14 @@ public class ProductServiceImpl implements ProductService {
 
 
   @Override
-  public Product addProduct(@Valid ProductDTO candidateProductDTO) {
-    log.info("NUEVO PRODUCTO: " + candidateProductDTO);
-    Product newProduct = productMapper.productDtoToProduct(candidateProductDTO);
-    return productRepository.save(newProduct);
-  }
-
-  @Override
-  public void deleteProduct(Long productId) {
-    productRepository.deleteById(productId);
+  public Product addProduct(@Valid ProductDTO candidateProductDTO) throws BillingException {
+    if (productRepository.existsByCode(candidateProductDTO.getCode())) {
+      throw new BillingException("El código ya está en uso");
+    } else {
+      log.info("NUEVO PRODUCTO: " + candidateProductDTO);
+      Product newProduct = productMapper.productDtoToProduct(candidateProductDTO);
+      return productRepository.save(newProduct);
+    }
   }
 
   @Override
@@ -59,12 +58,11 @@ public class ProductServiceImpl implements ProductService {
     Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new BillingException(
             "No se encuentra el producto con ID: " + productId));
 
-      // Verificar si hay suficiente stock disponible
-      if (existingProduct.getStock() < updatedProductDTO.getAmount()) {
-        throw new BillingException("No hay suficiente stock disponible");
-      }
       // Actualizar el producto
-    existingProduct.setStock(updatedProductDTO.getAmount());
+    existingProduct.setDescription(updatedProductDTO.getDescription());
+    existingProduct.setCode(updatedProductDTO.getCode());
+    existingProduct.setStock(updatedProductDTO.getStock());
+    existingProduct.setPrice(updatedProductDTO.getPrice());
       return productRepository.save(existingProduct);
     }
 }
