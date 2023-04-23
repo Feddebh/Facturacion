@@ -34,7 +34,7 @@ public class BillingServiceImpl implements BillingService {
   private final ProductRepository productRepository;
 
   @Override
-  public Invoice createInvoice(PurchaseRequest purchaseRequest) throws BillingException {
+  public Invoice createInvoice(PurchaseRequest purchaseRequest){
 
     // Obtener el cliente de la base de datos por su id
     Long clientId = purchaseRequest.getClientId();
@@ -90,12 +90,9 @@ public class BillingServiceImpl implements BillingService {
   public List<Invoice> getInvoicesByClientId(Long clientId) {
 
     // Obtener el cliente de la base de datos por su id
-    Client client = clientRepository.findById(clientId).orElse(null);
+    Client client = clientRepository.findById(clientId).orElseThrow(() -> new BillingException("No se encontro el cliente con el ID especificado. " + clientId, HttpStatus.NOT_FOUND));
 
-    // Verificar si el cliente existe
-    if (client == null) {
-      return null;
-    }
+    // Verificar si el cliente exist
 
     // Obtener las facturas del cliente
     List<Invoice> invoices = invoiceRepository.findByClient(client);

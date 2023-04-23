@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BillingService {
 
-  Invoice createInvoice(PurchaseRequest purchaseRequest) throws BillingException;
+  Invoice createInvoice(PurchaseRequest purchaseRequest);
 
   List<Invoice> getInvoicesByClientId(Long clientId);
 }

@@ -25,8 +25,7 @@ public class ProductController {
    private final ProductMapper productMapper;
 
   @PostMapping(consumes = "application/json", produces = "application/json")
-  public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO candidateProductDTO)
-      throws BillingException {
+  public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO candidateProductDTO){
     Product addedProduct = this.productService.addProduct(candidateProductDTO);
     ProductDTO addedProductDTO = this.productMapper.productToProductDto(addedProduct);
     return ResponseEntity.status(HttpStatus.CREATED).body(addedProductDTO);
@@ -34,8 +33,7 @@ public class ProductController {
 
   @PutMapping(value = "/{productId}", consumes = "application/json", produces = "application/json")
   public ResponseEntity<ProductDTO> updateProduct(
-      @PathVariable Long productId, @Valid @RequestBody ProductDTO updatedproductDTO)
-      throws BillingException {
+      @PathVariable Long productId, @Valid @RequestBody ProductDTO updatedproductDTO) {
     Product updatedProduct = this.productService.updateProduct(productId, updatedproductDTO);
     ProductDTO updatedProductResponse = this.productMapper.productToProductDto(updatedProduct);
     return ResponseEntity.ok(updatedProductResponse);
@@ -47,8 +45,7 @@ public class ProductController {
   } // OK
 
   @GetMapping(value = "/{productId}", produces = "application/json")
-  public ResponseEntity<ProductDTO> getProductById(@NotNull @PathVariable Long productId)
-      throws BillingException {
+  public ResponseEntity<ProductDTO> getProductById(@NotNull @PathVariable Long productId){
     Product product = this.productService.getProductById(productId);
     return ResponseEntity.ok(this.productMapper.productToProductDto(product));
   } // OK

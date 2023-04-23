@@ -8,10 +8,8 @@ import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.service.ClientService;
 import java.util.List;
 import javax.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class ClientServiceImpl implements ClientService {
   private final ClientMapper clientMapper;
 
   @Override
-  public Client findByDocNumber(String docNumber) throws BillingException {
+  public Client getClientByDocNumber(String docNumber){
     return this.clientRepository
         .findByDocNumber(docNumber).orElseThrow(() ->
                     new BillingException("NO SE ENCUENTRA EL CLIENTE CON EL DNI INGRESADO", HttpStatus.NOT_FOUND));
@@ -44,7 +42,7 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public Client getClientById(Long clientId) throws BillingException {
+  public Client getClientById(Long clientId){
     if (clientId <= 0) {
       throw new BillingException("EL ID INGRESADO NO ES VALIDO", HttpStatus.BAD_REQUEST);
     }
@@ -54,7 +52,7 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public Client updateClient(Long clientId, ClientDTO updatedClientDTO) throws BillingException {
+  public Client updateClient(Long clientId, ClientDTO updatedClientDTO){
     Client existingClient =
         clientRepository
             .findById(clientId)

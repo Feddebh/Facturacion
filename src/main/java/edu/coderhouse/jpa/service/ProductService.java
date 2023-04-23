@@ -8,11 +8,11 @@ import javax.validation.Valid;
 
 public interface ProductService {
 
-  Product addProduct(@Valid ProductDTO candidateProductDTO) throws BillingException;
+  Product addProduct(@Valid ProductDTO candidateProductDTO);
 
   List<Product> getAllProducts();
 
-  Product getProductById(Long productId) throws BillingException;
+  Product getProductById(Long productId);
 
-  Product updateProduct(Long productId, ProductDTO updatedProduct) throws BillingException;
+  Product updateProduct(Long productId, ProductDTO updatedProduct);
 }

@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
   private final ProductMapper productMapper;
 
   @Override
-  public Product addProduct(@Valid ProductDTO candidateProductDTO) throws BillingException {
+  public Product addProduct(@Valid ProductDTO candidateProductDTO) {
     if (productRepository.existsByCode(candidateProductDTO.getCode())) {
       throw new BillingException("El código ya está en uso", HttpStatus.BAD_REQUEST);
     } else {
@@ -40,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product getProductById(Long productId) throws BillingException {
+  public Product getProductById(Long productId){
     if (productId <= 0) {
       throw new BillingException("EL ID INGRESADO NO ES VALIDO", HttpStatus.BAD_REQUEST);
     }
@@ -50,8 +50,7 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product updateProduct(Long productId, ProductDTO updatedProductDTO)
-      throws BillingException {
+  public Product updateProduct(Long productId, ProductDTO updatedProductDTO){
 
     Product existingProduct =
         productRepository

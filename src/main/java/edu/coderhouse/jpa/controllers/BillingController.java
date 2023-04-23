@@ -21,13 +21,12 @@ public class BillingController {
 
   @PostMapping(consumes = "application/json", produces = "application/json")
   @Transactional
-  public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest)
-      throws BillingException {
+  public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest){
     return ResponseEntity.status(HttpStatus.CREATED)
         .body(billingService.createInvoice(purchaseRequest));
   }
 
-  @GetMapping(value = "/user/{clientId}", produces = "application/json")
+  @GetMapping(value = "/invoices/client/{clientId}", produces = "application/json")
   public ResponseEntity<List<Invoice>> getInvoicesByClientId(@PathVariable Long clientId) {
 
     return ResponseEntity.ok(billingService.getInvoicesByClientId(clientId));

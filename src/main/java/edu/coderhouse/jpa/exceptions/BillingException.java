@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.http.HttpStatus;
 
 @Data
-public class BillingException extends Exception {
+public class BillingException extends RuntimeException {
 
   private final HttpStatus statusCode;
 
