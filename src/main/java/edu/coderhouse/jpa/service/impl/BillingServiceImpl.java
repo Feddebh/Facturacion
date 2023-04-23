@@ -8,10 +8,11 @@ import edu.coderhouse.jpa.models.entities.Invoice;
 import edu.coderhouse.jpa.models.entities.InvoiceDetail;
 import edu.coderhouse.jpa.models.entities.Product;
 import edu.coderhouse.jpa.repository.ClientRepository;
+import edu.coderhouse.jpa.repository.InvoiceDetailRepository;
 import edu.coderhouse.jpa.repository.InvoiceRepository;
 import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.BillingService;
-import edu.coderhouse.jpa.service.InvoiceDetailService;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class BillingServiceImpl implements BillingService {
 
   private final ClientRepository clientRepository;
 
-  private final InvoiceDetailService invoiceDetailService;
+  private final InvoiceDetailRepository invoiceDetailRepository;
 
   private final ProductRepository productRepository;
 
@@ -71,7 +72,7 @@ public class BillingServiceImpl implements BillingService {
       detail.setProduct(product);
       detail.setSubtotal(detail.getAppliedPrice().multiply(new BigDecimal(detail.getAmount())));
 
-      invoiceDetailService.saveInvoiceDetail(detail);
+      invoiceDetailRepository.save(detail);
       invoiceTotal = invoiceTotal.add(detail.getSubtotal());
       savedDetails.add(detail);
       product.setStock(product.getStock() - productAmountDTO.getAmount());
