@@ -30,28 +30,3 @@ public class GlobalExceptionHandler {
     return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatusCode()));
   }
 }
-
-  /* @ExceptionHandler({ClientNotFoundException.class, ProductNotFoundException.class})
-  public ResponseEntity<ErrorResponse> handleNotFoundException(ClientNotFoundException e) {
-    ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-  }
-*/
-  /* @ExceptionHandler(NegativeStockException.class)
-  public ResponseEntity<ErrorResponse> handleNegativeStockException(NegativeStockException e) {
-    ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-  }*/
-
-  /*@ExceptionHandler(NullParameterException.class)
-  public ResponseEntity<String> handleNullPointerException(NullPointerException ex) {
-    return ResponseEntity.badRequest()
-            .body("Se ha producido una excepción de tipo NullPointerException: " + ex.getMessage());
-  }*/
-
-  /*@ExceptionHandler(ProductOutOfStockException.class)
-  public ResponseEntity<ErrorResponse> ProductOutOfStockException(ProductOutOfStockException e) {
-    ErrorResponse errorResponse = new ErrorResponse(400, e.getMessage());
-    return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON).body(errorResponse);
-  }
-}*/

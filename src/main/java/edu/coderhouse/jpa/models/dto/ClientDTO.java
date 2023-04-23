@@ -10,6 +10,6 @@ public class ClientDTO implements Serializable {
     @JsonProperty("client_id")
     private Long clientId;
     private String name;
-    private String lastname;
+    private String lastName;
     private String docNumber;
 }

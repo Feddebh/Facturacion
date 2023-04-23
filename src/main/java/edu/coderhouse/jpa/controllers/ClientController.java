@@ -20,25 +20,23 @@ import org.springframework.web.bind.annotation.*;
 public class ClientController {
 
   @Autowired private ClientService clientService;
-  @Autowired
-  private ClientMapper clientMapper;
+
+  @Autowired private ClientMapper clientMapper;
 
   @PostMapping(consumes = "application/json", produces = "application/json")
-  public ResponseEntity<ClientDTO> addClient(@Valid @RequestBody ClientDTO clientDTO) throws BillingException {
-    Client client = this.clientMapper.clientDtoToClient(clientDTO);
-    Client addedClient = this.clientService.addClient(client);
-    ClientDTO addedClientDTO = this.clientMapper.clientToClientDTO(addedClient);
+  public ResponseEntity<ClientDTO> addClient(@Valid @RequestBody ClientDTO candidateClientDTO) throws BillingException {
+    Client addedClient = this.clientService.addClient(candidateClientDTO);
     return ResponseEntity.status(HttpStatus.CREATED)
-            .header("location", "/" + addedClientDTO.getClientId())
-            .body(addedClientDTO);
-  }
+            .header("location", "/" + addedClient.getId())
+            .body(candidateClientDTO);
+  } //OK
 
   @PutMapping(value = "/{clientId}", consumes = "application/json", produces = "application/json")
   public ResponseEntity<ClientDTO> updateClient(
-      @PathVariable Long clientId, @Valid @RequestBody ClientDTO updatedClientDTO) throws BillingException {
-    Client updatedClient = this.clientMapper.clientDtoToClient(updatedClientDTO);
-    Client updated = this.clientService.updateClient(clientId, updatedClient);
-    return ResponseEntity.ok(this.clientMapper.clientToClientDTO(updated));
+    @PathVariable Long clientId, @Valid @RequestBody ClientDTO updatedClientDTO) throws BillingException {
+      Client updatedClient = this.clientService.updateClient(clientId, updatedClientDTO);
+      ClientDTO updatedClientResponse = this.clientMapper.clientToClientDTO(updatedClient);
+      return ResponseEntity.ok(updatedClientResponse);
   }
 
   @GetMapping(produces = "application/json")

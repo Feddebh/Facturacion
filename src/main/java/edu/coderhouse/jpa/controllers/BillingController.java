@@ -1,5 +1,6 @@
 package edu.coderhouse.jpa.controllers;
 
+import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.models.dto.PurchaseRequest;
 import edu.coderhouse.jpa.models.entities.Invoice;
 import edu.coderhouse.jpa.service.BillingService;
@@ -19,7 +20,7 @@ public class BillingController {
 
   @PostMapping(consumes = "application/json", produces = "application/json")
   @Transactional
-  public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) {
+  public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) throws BillingException {
     Invoice createdInvoice = billingService.createInvoice(purchaseRequest);
     if (createdInvoice == null) {
       return ResponseEntity.badRequest().body(null);

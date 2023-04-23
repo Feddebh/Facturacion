@@ -1,29 +1,36 @@
 package edu.coderhouse.jpa.service.impl;
 
-import edu.coderhouse.jpa.exceptions.NegativeStockException;
-import edu.coderhouse.jpa.exceptions.NullParameterException;
-import edu.coderhouse.jpa.exceptions.ProductNotFoundException;
-import edu.coderhouse.jpa.exceptions.ProductOutOfStockException;
+import edu.coderhouse.jpa.exceptions.BillingException;
+import edu.coderhouse.jpa.mappers.ProductMapper;
+import edu.coderhouse.jpa.models.dto.ProductDTO;
+import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.models.entities.Product;
 import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.ProductService;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
+
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
 
   @Autowired
   private ProductRepository productRepository;
 
-  @Autowired
+  @Autowired private ProductMapper productMapper;
 
 
   @Override
-  public Product addProduct(Product candidateProduct) {
-    return productRepository.save(candidateProduct);
+  public Product addProduct(@Valid ProductDTO candidateProductDTO) {
+    log.info("NUEVO PRODUCTO: " + candidateProductDTO);
+    Product newProduct = productMapper.productDtoToProduct(candidateProductDTO);
+    return productRepository.save(newProduct);
   }
 
   @Override
@@ -37,42 +44,28 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product getProductById(Long productId) {
-    Optional<Product> optionalProduct = productRepository.findById(productId);
-    if (optionalProduct.isPresent()) {
-      return optionalProduct.get();
-    } else {
-      throw new ProductNotFoundException("No se encuentra el producto con ID: " + productId);
+  public Product getProductById(Long productId) throws BillingException{
+    if (productId <= 0){
+      throw new BillingException("EL ID INGRESADO NO ES VALIDO");
     }
+    return this.productRepository.findById(productId).
+            orElseThrow(() -> new BillingException("El ID especificado (aun) no existe."));
   }
 
   @Override
-  public Product updateProduct(Long productId, Product updatedProduct)
-          throws NegativeStockException, ProductOutOfStockException {
+  public Product updateProduct(Long productId, ProductDTO updatedProductDTO)
+          throws BillingException {
 
-    Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(
+    Product existingProduct = productRepository.findById(productId).orElseThrow(() -> new BillingException(
             "No se encuentra el producto con ID: " + productId));
-    if (existingProduct != null) {
-      // Verificar si hay suficiente stock
-      int updatedStock = updatedProduct.getStock();
-      if (updatedStock < 0) {
-        throw new NegativeStockException("El stock no puede ser negativo");
-      }
 
       // Verificar si hay suficiente stock disponible
-      if (existingProduct.getStock() < updatedStock) {
-        throw new ProductOutOfStockException("No hay suficiente stock disponible");
+      if (existingProduct.getStock() < updatedProductDTO.getAmount()) {
+        throw new BillingException("No hay suficiente stock disponible");
       }
-
-      existingProduct.setDescription(updatedProduct.getDescription());
-      existingProduct.setCode(updatedProduct.getCode());
-      existingProduct.setStock(updatedProduct.getStock());
-      existingProduct.setPrice(updatedProduct.getPrice());
-
+      // Actualizar el producto
+    existingProduct.setStock(updatedProductDTO.getAmount());
       return productRepository.save(existingProduct);
-    } else {
-      throw new NullParameterException("El Id no puede ser nulo.");
     }
-  }
 }
 

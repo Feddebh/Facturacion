@@ -1,7 +1,6 @@
 package edu.coderhouse.jpa.service.impl;
 
-import edu.coderhouse.jpa.exceptions.NullParameterException;
-import edu.coderhouse.jpa.exceptions.ProductOutOfStockException;
+import edu.coderhouse.jpa.exceptions.BillingException;
 import edu.coderhouse.jpa.models.dto.ProductDTO;
 import edu.coderhouse.jpa.models.dto.PurchaseRequest;
 import edu.coderhouse.jpa.models.entities.Client;
@@ -35,11 +34,11 @@ public class BillingServiceImpl implements BillingService {
 
 
   @Override
-  public Invoice createInvoice(PurchaseRequest purchaseRequest) {
+  public Invoice createInvoice(PurchaseRequest purchaseRequest) throws BillingException {
 
     // Obtener el cliente de la base de datos por su id
     Long clientId = Long.parseLong(purchaseRequest.getClientId());
-    Client client = clientRepository.findById(clientId).orElseThrow(() -> new NullParameterException
+    Client client = clientRepository.findById(clientId).orElseThrow(() -> new BillingException
             ("El parámetro candidateClient no puede ser nulo"));
 
     // Verificar si el cliente existe
