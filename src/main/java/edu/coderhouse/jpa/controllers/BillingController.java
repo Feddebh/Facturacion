@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
@@ -21,46 +20,12 @@ public class BillingController {
   @PostMapping(consumes = "application/json", produces = "application/json")
   @Transactional
   public ResponseEntity<Invoice> createInvoice(@RequestBody @Valid PurchaseRequest purchaseRequest) throws BillingException {
-    Invoice createdInvoice = billingService.createInvoice(purchaseRequest);
-    if (createdInvoice == null) {
-      return ResponseEntity.badRequest().body(null);
-    }
-    return ResponseEntity.status(HttpStatus.CREATED).body(createdInvoice);
+     return ResponseEntity.status(HttpStatus.CREATED).body(billingService.createInvoice(purchaseRequest));
   }
 
   @GetMapping("/{clientId}")
   public ResponseEntity<Iterable<Invoice>> getInvoicesByClientId(@PathVariable Long clientId) {
-    Iterable<Invoice> invoices = billingService.getInvoicesByClientId(clientId);
-    if (invoices == null) {
-      return ResponseEntity.notFound().build();
-    }
-    return ResponseEntity.ok(invoices);
+
+    return ResponseEntity.ok(billingService.getInvoicesByClientId(clientId));
   }
 }
-
-/*
-
-mando UN PURCHASEREQUEST CON EL ID DEL CLIENTE Y UNA LISTA DE productDTO,
-
-{
-  "client_id": 123456,
-  "invoice_details":[
-    {
-      "product_id":123,
-      "amount":2
-
-    },
-    {
-      "product_id":133,
-      "amount":3
-    }
-
-  ]
-
-
-}
-
-- VALIDAR QUE EL CLIENTE EXISTA EN LA BDD
-- ITERAR LOS PRODUCTDTO Y VERIFICAR QUE TODOS LOS PRODUCTID ESTEN EN BDD Y TENGAN EL STOCK REQUERIDO.
-- AGREGAR GOOGLE JAVA FORMAT AL PROYECTO.
- */
