@@ -1,4 +1,4 @@
-git ![logo](tools/images/coderLogo.png)
+![logo](tools/images/coderLogo.png)
 
 # CODERHOUSE - CURSO DE JAVA: API REST DE FACTURACION
 Proyecto Final para el curso de Java inicial de CODERHOUSE. Consistiendo el mismo en el desarrollo de una aplicacion
