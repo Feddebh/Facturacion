@@ -35,4 +35,7 @@ public class Client {
   @Size(min = 2, max = 11, message = "El DNI debe tener entre 2 y 11 caracteres.")
   @Pattern(regexp = "^[0-9]+$")
   private String docNumber;
+
+  @Column(name = "active", nullable = false, columnDefinition = "boolean default true")
+  private boolean active = true;
 }

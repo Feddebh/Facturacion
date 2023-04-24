@@ -39,4 +39,6 @@ CREATE TABLE IF NOT EXISTS invoice_details
     PRIMARY KEY (invoice_detail_id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
+ALTER TABLE clients
+ADD COLUMN status BOOLEAN NOT NULL DEFAULT TRUE;
 

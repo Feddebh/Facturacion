@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
   Optional<Client> findByDocNumber(String docNumber);
+
 }

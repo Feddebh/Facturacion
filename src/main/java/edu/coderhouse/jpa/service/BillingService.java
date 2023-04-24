@@ -10,4 +10,6 @@ public interface BillingService {
   Invoice createInvoice(PurchaseRequest purchaseRequest);
 
   List<Invoice> getInvoicesByClientId(Long clientId);
+
+  Invoice getInvoiceByInvoiceId(Long id);
 }

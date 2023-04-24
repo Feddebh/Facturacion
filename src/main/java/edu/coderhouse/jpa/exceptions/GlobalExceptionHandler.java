@@ -16,7 +16,6 @@ public class GlobalExceptionHandler {
   @ExceptionHandler({BillingException.class})
   public ResponseEntity<ErrorResponse> billingException(BillingException e) {
     ErrorResponse errorResponse = new ErrorResponse();
-    System.out.println("LLEGUE HASTA ACA");
     errorResponse.setStatusCode(
        e.getStatusCode().value());
     errorResponse.setMessage(e.getMessage());

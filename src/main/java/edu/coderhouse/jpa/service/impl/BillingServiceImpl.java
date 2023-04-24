@@ -15,6 +15,7 @@ import edu.coderhouse.jpa.service.BillingService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class BillingServiceImpl implements BillingService {
     // Verificar si el cliente existe
     // Configurar la fecha de creación de la factura
     Invoice invoice = new Invoice();
-    invoice.setCreatedAt(LocalDateTime.now());
+    invoice.setCreatedAt(LocalDateTime.now().atZone(ZoneId.of("America/Buenos_Aires")).toLocalDateTime());
     invoice.setClient(client);
 
     Invoice savedInvoice = invoiceRepository.save(invoice);
@@ -100,5 +101,13 @@ public class BillingServiceImpl implements BillingService {
 
     // Retornar las facturas del cliente en el cuerpo de la respuesta
     return ResponseEntity.ok(invoices).getBody();
+  }
+
+  @Override
+  public Invoice getInvoiceByInvoiceId(Long id) {
+    // Obtener la factura de la base de datos por su id
+    return invoiceRepository
+            .findById(id)
+            .orElseThrow(() -> new BillingException("No se encontró la factura con el ID especificado. " + id, HttpStatus.NOT_FOUND));
   }
 }

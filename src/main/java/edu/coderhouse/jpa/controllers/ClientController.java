@@ -5,6 +5,7 @@ import edu.coderhouse.jpa.models.dto.ClientDTO;
 import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.service.ClientService;
 import java.util.List;
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -35,7 +36,6 @@ public class ClientController {
         .header("location", "/" + newClient.getId())
         .body(candidateClientDto);
   }
-
   @PutMapping(value = "/{clientId}", consumes = "application/json", produces = "application/json")
   public ResponseEntity<ClientDTO> updateClient(
       @PathVariable Long clientId, @Valid @RequestBody ClientDTO updatedClientDTO){
@@ -51,20 +51,19 @@ public class ClientController {
   }
 
   // Obtener un cliente por ID.
-
   @GetMapping(value = "/{clientId}", produces = "application/json")
   public ResponseEntity<ClientDTO> getClientById(@NotNull @PathVariable Long clientId){
     Client client = this.clientService.getClientById(clientId);
     return ResponseEntity.ok(this.clientMapper.clientToClientDTO(client));
-
-    //falta metodo para devolver cliente por dni
-
   }
 
   @GetMapping(value = "/dni/{docNumber}", produces = "application/json")
-  public ResponseEntity<Client> getClientByDocNumber(@PathVariable("docNumber") @NotBlank @Size(max = 10) String docNumber){
-    System.out.println("ESTOY ACA" + docNumber);
+  public ResponseEntity<Client>
+  getClientByDocNumber(@PathVariable("docNumber")
+                       @Size(min = 2, max = 11, message = "El DNI debe tener entre 2 y 11 caracteres.")
+                       @Pattern(regexp = "^[0-9]+$", message = "Solo se permiten numeros del 0 al 9") String docNumber){
     return ResponseEntity.ok(clientService.getClientByDocNumber(docNumber));
   }
+
 
 }

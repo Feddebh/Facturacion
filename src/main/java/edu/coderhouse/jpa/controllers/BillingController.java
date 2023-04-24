@@ -31,4 +31,15 @@ public class BillingController {
 
     return ResponseEntity.ok(billingService.getInvoicesByClientId(clientId));
   }
+
+  @GetMapping(value = "/invoices/{invoiceId}", produces = "application/json")
+  public ResponseEntity<Invoice> getInvoiceByInvoiceId(@PathVariable Long invoiceId) {
+    Invoice invoice = billingService.getInvoiceByInvoiceId(invoiceId);
+    if (invoice == null) {
+      throw new BillingException("Invoice not found with id: " + invoiceId, HttpStatus.NOT_FOUND);
+    }
+    return ResponseEntity.ok(invoice);
+  }
+
 }
+
