@@ -232,77 +232,6 @@ Responses:
 
 #### Validaciones
 * En caso de que no se encuentre un producto con el numero de id proporcionado, se lanza una excepción y devuelve una respuesta con el estado HTTP 404 (Not Found) y un mensaje de error indicando que el producto no fue encontrado.
-
-
-#### Testing
-```
-curl --location --request POST 'https://bohledevs-meli-morse.herokuapp.com/morse/bits2morse' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "text": "0000000011011011001110000011111100011111100111111000000011101111111101110111000000011000111111000000000111111001111110000000110000110111111110111011100000011011100000000000"
-}'
-```
-
-
-### 2. humanToMorse
-
-#### Endpoint
-```
-URL: /morse/2morse
-Input: MorseDto with natural language string
-Responses: 
-    * 200 OK: MorseDto with morse string
-    * 404 Bad Request
-    * 500 Internal Server Error
-```
-
-#### Validations
-* Only supports the following range of characters:
-    * English Letters [A-Za-z]
-    * Digits [0-9]
-    * Whitespaces [ ]
-    * Fullstops [.]
-* Assumes words are separated by whitespaces
-
-#### Testing
-```
-curl --location --request POST 'https://bohledevs-meli-morse.herokuapp.com/morse/2morse' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "text": "HOLA MELI"
-}'
-```
-
-### 3. morseToHuman
-
-#### Endpoint
-```
-URL: /morse/2text
-Input: MorseDto with morse string
-Responses: 
-    * 200 OK: MorseDto with natural language string
-    * 404 Bad Request
-    * 500 Internal Server Error
-```
-
-#### Validations
-* Only supports the following range of characters:
-    * English Letters [A-Za-z]
-    * Digits [0-9]
-    * Whitespaces [ ]
-    * Fullstops [.]
-* Assumes letters are separated by **one** whitespace
-* Assumes words are separated by **two** whitespaces
-
-#### Testing
-```
-curl --location --request POST 'https://bohledevs-meli-morse.herokuapp.com/morse/2text' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "text": ".... --- .-.. .-  -- . .-.. .."
-}'
-```
-
 ---
 ## Project Settings
 
@@ -328,4 +257,3 @@ curl --location --request POST 'https://bohledevs-meli-morse.herokuapp.com/morse
 ---
 ## Challenge Description
 
-* [Technical Exam PDF](Descripcion_Examen_Tecnico.pdf)
