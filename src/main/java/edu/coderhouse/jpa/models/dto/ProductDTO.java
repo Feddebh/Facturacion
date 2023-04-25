@@ -5,11 +5,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
 public class ProductDTO {
 
+  @JsonProperty("product_id")
   private Long productId;
 
   @NotNull(message = "La descripción del producto no puede ser nula")

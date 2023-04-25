@@ -19,7 +19,7 @@ public class Client {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long clientId;
 
   @Column(name = "name", length = 75)
   @Size(min = 2, max = 50, message = "El campo 'nombre' admite entre 2 y 50 caracteres")

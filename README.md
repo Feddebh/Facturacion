@@ -238,22 +238,50 @@ Responses:
 ### Specifications
 * Java 11
 ```
-  openjdk 11.0.14 2022-01-18
-  OpenJDK Runtime Environment (build 11.0.14+9-Ubuntu-0ubuntu2.20.04)
-  OpenJDK 64-Bit Server VM (build 11.0.14+9-Ubuntu-0ubuntu2.20.04, mixed mode, sharing)
+openjdk version "11.0.18" 2023-01-17
+OpenJDK Runtime Environment (build 11.0.18+10-post-Ubuntu-0ubuntu122.04)
+OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu122.04, mixed mode, sharing)
 ```
 * Maven 3
-* Spring Boot 2.6.4
+```
+Apache Maven 3.6.3
+Maven home: /usr/share/maven
+Java version: 11.0.18, vendor: Ubuntu, runtime: /usr/lib/jvm/java-11-openjdk-amd64
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "5.15.0-70-generic", arch: "amd64", family: "unix"
+```
+* Spring Boot 2.5.14
+```
+  .   ____          _            __ _ _
+  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+  ( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+  \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+  =========|_|==============|___/=/_/_/_/
+  :: Spring Boot ::               (v2.5.14)
+```
 
 
-### Dependencies
-* [spring-boot-starter-validation](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation): for input validation annotations
+### Dependencias
+* [spring-boot-starter-data-jpa](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa): for database access with JPA
 * [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web): for layered architecture beans
+* [com.h2database:h2](https://mvnrepository.com/artifact/com.h2database/h2): in-memory database for testing
 * [spring-boot-starter-test](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test): unit testing
-* [project lombok](https://projectlombok.org/setup/maven): for utility annotations
-* [google java format](https://github.com/google/google-java-format): code style tool
-* [jackson-core](https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind): for serialization of Morse Alphabet during unit tests
+* [spring-boot-starter-validation](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation): for input validation annotations
+* [javax.validation:validation-api](https://mvnrepository.com/artifact/javax.validation/validation-api): for validation API
+* [springfox-boot-starter](https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter): for Swagger API documentation
+* [project-lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok): for utility annotations
+* [com.google.code.gson:gson](https://mvnrepository.com/artifact/com.google.code.gson/gson): for JSON serialization and deserialization
+* [mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct): for mapping between Java Beans
+
+###  API Documentation:
+* [Swagger UI](http://localhost:8080/swagger-ui/index.html) (When running only)
 
 ---
 ## Challenge Description
+Here's the list of dependencies used in the project:
+
+
+Note: The version numbers for each dependency are not provided in the given example.
+## 
 

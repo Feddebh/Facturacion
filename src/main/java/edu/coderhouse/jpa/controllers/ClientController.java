@@ -33,7 +33,7 @@ public class ClientController {
   public ResponseEntity<ClientDTO> addClient(@Valid @RequestBody ClientDTO candidateClientDto){
     Client newClient = this.clientService.addClient(candidateClientDto);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .header("location", "/" + newClient.getId())
+        .header("location", "/" + newClient.getClientId())
         .body(candidateClientDto);
   }
   @PutMapping(value = "/{clientId}", consumes = "application/json", produces = "application/json")
