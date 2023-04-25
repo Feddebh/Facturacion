@@ -26,7 +26,7 @@ Sus características principales son:
 * _getProductById_: Obtiene las características de un producto en específico a partir de su ID.
 
 ---
-# Features
+# Funcionalidades
 
 ## Facturación / Billing
 ### 1. createInvoice: 
