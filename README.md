@@ -1,10 +1,10 @@
 ![logo](tools/images/coderLogo.png)
 
-# CODERHOUSE - CURSO DE JAVA: API REST DE FACTURACION
-Proyecto Final para el curso de Java inicial de CODERHOUSE. Consistiendo el mismo en el desarrollo de una aplicacion
+# CURSO DE JAVA: API REST DE FACTURACION
+Proyecto Final para el curso de Java inicial de CODERHOUSE. Consistiendo el mismo en el desarrollo de una aplicación
 que nos permita administrar las ventas de un comercio.
 
-Sus caracteristicas principales son:
+Sus características principales son:
 
 ### Facturacion:
 * _createInvoice_: Crea una nueva factura para un cliente registrado y activo en la base de datos.
@@ -12,23 +12,23 @@ Sus caracteristicas principales son:
 * _getInvoiceByInvoiceId_: Obtiene una lista de facturas a partir del ID de una factura específica.
 
 
-### Gestion de Clientes:
+### Gestión de Clientes:
 * _addClient_: Agrega un nuevo cliente a la base de datos con su Nombre, Apellido y número de Documento, y se le asigna automáticamente un número de ID. 
 * _updateClient_: Actualiza los datos de un cliente existente y activo en la base de datos, tomando como referencia su ID.
 * _getAllClients_: Obtiene una lista con todos los clientes registrados en la base de datos.
 * _getClientById_: Obtiene los datos de un cliente en específico a partir de su ID.
 * _getClientByDocNumber_: Obtiene los datos de un cliente en específico a partir de su número de documento.
 
-### Gestion de Productos:
-* _addProduct_: Agrega un nuevo producto a la base de datos con su descripcion, codigo, stock disponible y precio, y se le asigna automáticamente un número de ID.
+### Gestión de Productos:
+* _addProduct_: Agrega un nuevo producto a la base de datos con su descripción, código, stock disponible y precio, y se le asigna automáticamente un número de ID.
 * _updateProduct_: Actualiza los datos de un producto existente y activo en la base de datos, tomando como referencia su ID.
 * _getAllProducts_: Obtiene una lista con todos los productos registrados en la base de datos.
-* _getProductById_: Obtiene las caracteristicas de un producto en específico a partir de su ID.
+* _getProductById_: Obtiene las características de un producto en específico a partir de su ID.
 
 ---
 # Features
 
-##  - Facturacion
+## Facturación / Billing
 ### 1. createInvoice: 
 
 #### Endpoint
@@ -76,7 +76,7 @@ Responses:
 #### Validaciones
 * La validación de la existencia de la factura se realiza en el método del servicio mediante el método findById del repositorio. Si la factura no se encuentra en la base de datos, se lanza una excepción BillingException con un mensaje de error y un código de estado HTTP 404 (Not Found).
 
-## - Gestion de Clientes
+## Gestión de Clientes
 ### 1. addClient: 
 
 #### Endpoint
@@ -98,7 +98,7 @@ Responses:
     * Si los datos enviados en el cuerpo de la solicitud no cumplen con las validaciones definidas en el DTO ClientDTO.
     * Si los datos enviados en el cuerpo de la solicitud son nulos o vacíos.
     * Si el número de documento enviado en el cuerpo de la solicitud ya existe en la base de datos, ya que está definido como campo único en la entidad Client.
-    * Si se intenta crear un nuevo cliente con un id ya existente en la base de datos, lo que no debería suceder ya que se está utilizando la estrategia de generación automática de ids.
+    * Si se intenta crear un nuevo cliente con un ID ya existente en la base de datos, lo que no debería suceder, ya que se está utilizando la estrategia de generación automática de ids.
 
 ### 2. updateClient:
 
@@ -172,7 +172,7 @@ Responses:
 * En la anotación @Pattern se especifica que el docNumber debe contener únicamente números del 0 al 9.
 * Si el objeto Client no es encontrado, se lanza una excepción con un mensaje de error y un estado HTTP 404 (Not Found).
 
-## - Gestion de Productos
+## Gestión de Productos
 ### 1. addProduct:
 
 #### Endpoint
@@ -187,7 +187,7 @@ Responses:
 #### Validaciones
 * Si el DTO del producto que se recibe en la solicitud no cumple con las siguientes validaciones definidas en ProductDTO, se lanza una excepción con un mensaje de error y un estado HTTP 400(Bad Request):
     * El campo descripción debe tener una longitud mínima de 2, máxima de 150 caracteres y no debe estar en uso en la base de datos.
-    * El código del producto debe tener una longitud mínima de 2 y máxima de 50 caracteres, y debe contener solo dígitos numericos.
+    * El código del producto debe tener una longitud mínima de 2 y máxima de 50 caracteres, y debe contener solo dígitos numéricos.
     * El stock debe ser un número entero positivo.
     * El precio debe ser un número decimal positivo.
 
@@ -217,7 +217,7 @@ Responses:
 ```
 
 #### Validaciones
-* El metodo getAllProducts() garantiza que solo se devuelvan los pr que existen en la base de datos y sean correctos segun las validaciones que se aplican en la entidad.
+* El metodo getAllProducts() garantiza que solo se devuelvan los productos que existen en la base de datos y sean correctos segun las validaciones que se aplican en la entidad.
 
 ### 4. getProductById:
 
@@ -231,18 +231,18 @@ Responses:
 ```
 
 #### Validaciones
-* En caso de que no se encuentre un producto con el numero de id proporcionado, se lanza una excepción y devuelve una respuesta con el estado HTTP 404 (Not Found) y un mensaje de error indicando que el producto no fue encontrado.
+* En caso de que no se encuentre un producto con el número de id proporcionado, se lanza una excepción y devuelve una respuesta con el estado HTTP 404 (Not Found) y un mensaje de error indicando que el producto no fue encontrado.
 ---
-## Project Settings
+## Configuraciones del proyecto
 
-### Specifications
+### Especificaciones:
 * Java 11
 ```
 openjdk version "11.0.18" 2023-01-17
 OpenJDK Runtime Environment (build 11.0.18+10-post-Ubuntu-0ubuntu122.04)
 OpenJDK 64-Bit Server VM (build 11.0.18+10-post-Ubuntu-0ubuntu122.04, mixed mode, sharing)
 ```
-* Maven 3
+* Maven
 ```
 Apache Maven 3.6.3
 Maven home: /usr/share/maven
@@ -263,25 +263,21 @@ OS name: "linux", version: "5.15.0-70-generic", arch: "amd64", family: "unix"
 
 
 ### Dependencias
-* [spring-boot-starter-data-jpa](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa): for database access with JPA
-* [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web): for layered architecture beans
-* [com.h2database:h2](https://mvnrepository.com/artifact/com.h2database/h2): in-memory database for testing
-* [spring-boot-starter-test](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test): unit testing
-* [spring-boot-starter-validation](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation): for input validation annotations
-* [javax.validation:validation-api](https://mvnrepository.com/artifact/javax.validation/validation-api): for validation API
-* [springfox-boot-starter](https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter): for Swagger API documentation
-* [project-lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok): for utility annotations
-* [com.google.code.gson:gson](https://mvnrepository.com/artifact/com.google.code.gson/gson): for JSON serialization and deserialization
-* [mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct): for mapping between Java Beans
+* [spring-boot-starter-data-jpa](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa): para acceder a la base de datos utilizando JPA
+* [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web): para implementar una arquitectura en capas de beans.
+* [spring-boot-starter-data-jpa](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa): base de datos en memoria para pruebas.
+* [com.h2database:h2](https://mvnrepository.com/artifact/com.h2database/h2): base de datos en memoria para pruebas.
+* [spring-boot-starter-test](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test): para realizar pruebas unitarias en el futuro.
+* [spring-boot-starter-validation](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation): para las anotaciones de validación de entrada.
+* [javax.validation](https://mvnrepository.com/artifact/javax.validation/validation-api): para utilizar la API de validación.
+* [springfox-boot-starter](https://mvnrepository.com/artifact/io.springfox/springfox-boot-starter): para la documentación de la API con Swagger.
+* [project-lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok): para anotaciones de utilidad.
+* [org.mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct): para mapear entre Java Beans.
 
-###  API Documentation:
-* [Swagger UI](http://localhost:8080/swagger-ui/index.html) (When running only)
+###  Documentación de API:
+* [Swagger UI](http://localhost:8080/swagger-ui/index.html) (Solo disponible cuando se está ejecutando)
 
 ---
-## Challenge Description
-Here's the list of dependencies used in the project:
 
-
-Note: The version numbers for each dependency are not provided in the given example.
 ## 
 
