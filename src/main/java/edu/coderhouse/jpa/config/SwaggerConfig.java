@@ -14,7 +14,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
-  
 
   @Bean
   public Docket api() {
@@ -23,17 +22,19 @@ public class SwaggerConfig {
         .apis(RequestHandlerSelectors.basePackage("edu.coderhouse.jpa.controller"))
         .paths(PathSelectors.any())
         .build()
-            .apiInfo(apiInfo());
+        .apiInfo(apiInfo());
   }
+
   private ApiInfo apiInfo() {
     return new ApiInfoBuilder()
-            .title("Billing API")
-            .description("This API provides functionality to manage an E-commerce sells.")
-            .version("1.0.0")
-            .contact(new Contact(
-                    "Bohle, Luis Federico / LinkedIn:",
-                    "https://www.linkedin.com/in/federico-bohle/",
-                    null))
-            .build();
+        .title("Billing API")
+        .description("This API provides functionality to manage an E-commerce sells.")
+        .version("1.0.0")
+        .contact(
+            new Contact(
+                "Bohle, Luis Federico / LinkedIn:",
+                "https://www.linkedin.com/in/federico-bohle/",
+                null))
+        .build();
   }
 }

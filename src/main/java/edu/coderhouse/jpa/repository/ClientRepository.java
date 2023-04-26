@@ -10,4 +10,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
 
   Optional<Client> findByDocNumber(String docNumber);
 
+  Optional<Client> findClientByIdAndActiveTrue(Long id);
 }

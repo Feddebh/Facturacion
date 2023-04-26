@@ -7,7 +7,6 @@ import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.repository.ClientRepository;
 import edu.coderhouse.jpa.service.ClientService;
 import java.util.List;
-import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,25 +15,31 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-
 public class ClientServiceImpl implements ClientService {
 
   private final ClientRepository clientRepository;
   private final ClientMapper clientMapper;
 
-  @Override
-  public Client getClientByDocNumber(String docNumber){
-    return this.clientRepository
-        .findByDocNumber(docNumber).orElseThrow(() ->
-                    new BillingException("NO SE ENCUENTRA EL CLIENTE CON EL DNI INGRESADO", HttpStatus.NOT_FOUND));
+  public Client registerClient(ClientDTO candidateClientDTO) {
+    log.info("NUEVO CLIENTE: " + candidateClientDTO);
+    Client newClient = clientMapper.clientDtoToClient(candidateClientDTO);
+    Client savedClient = clientRepository.save(newClient);
+    savedClient.setId(savedClient.getId());
+    return savedClient;
   }
 
   @Override
-  public Client addClient(@Valid ClientDTO candidateClientDTO) {
-    log.info("NUEVO CLIENTE: " + candidateClientDTO);
-    Client newClient = clientMapper.clientDtoToClient(candidateClientDTO);
-    return clientRepository.save(newClient);
-  } // OK
+  public Client updateExistingClient(Long clientId, ClientDTO updatedClientDTO) {
+    Client existingClient =
+        clientRepository
+            .findById(clientId)
+            .orElseThrow(
+                () ->
+                    new BillingException(
+                        "No se encuentra el cliente con ID: " + clientId, HttpStatus.NOT_FOUND));
+    clientMapper.updateClientFromDTO(updatedClientDTO, existingClient);
+    return clientRepository.save(existingClient);
+  }
 
   @Override
   public List<Client> getAllClients() {
@@ -42,23 +47,22 @@ public class ClientServiceImpl implements ClientService {
   }
 
   @Override
-  public Client getClientById(Long clientId){
-    if (clientId <= 0) {
-      throw new BillingException("EL ID INGRESADO NO ES VALIDO", HttpStatus.BAD_REQUEST);
-    }
+  public Client getClientById(Long clientId) {
     return this.clientRepository
         .findById(clientId)
-        .orElseThrow(() -> new BillingException("El ID especificado (aun) no existe.", HttpStatus.NOT_FOUND));
+        .orElseThrow(
+            () ->
+                new BillingException(
+                    "No se encuentra el cliente con ID: " + clientId, HttpStatus.NOT_FOUND));
   }
 
   @Override
-  public Client updateClient(Long clientId, ClientDTO updatedClientDTO){
-    Client existingClient =
-        clientRepository
-            .findById(clientId)
-            .orElseThrow(
-                () -> new BillingException("No se encuentra el cliente con ID: " + clientId, HttpStatus.NOT_FOUND));
-    clientMapper.updateClientFromDTO(updatedClientDTO, existingClient);
-    return clientRepository.save(existingClient);
+  public Client getClientByDocNumber(String docNumber) {
+    return this.clientRepository
+        .findByDocNumber(docNumber)
+        .orElseThrow(
+            () ->
+                new BillingException(
+                    "NO SE ENCUENTRA EL CLIENTE CON EL DNI INGRESADO", HttpStatus.NOT_FOUND));
   }
 }

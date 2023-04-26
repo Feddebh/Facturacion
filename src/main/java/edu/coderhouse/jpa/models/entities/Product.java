@@ -1,6 +1,5 @@
 package edu.coderhouse.jpa.models.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +34,6 @@ public class Product {
   @Column(name = "stock")
   @NotNull(message = "No se admite un stock de producto vacio")
   @Positive
-  @JsonIgnore
   private Integer stock;
 
   @Column(name = "price")

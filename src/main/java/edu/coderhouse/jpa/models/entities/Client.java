@@ -1,39 +1,36 @@
 package edu.coderhouse.jpa.models.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import lombok.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "clients")
 @Data
+@JsonPropertyOrder({"id", "name", "lastName", "docNumber", "active"})
 public class Client {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long clientId;
+  private Long id;
 
   @Column(name = "name", length = 75)
-  @Size(min = 2, max = 50, message = "El campo 'nombre' admite entre 2 y 50 caracteres")
-  @Pattern(regexp = "^[A-Za-z]+$", message = "Ha ingresado un caracter invalido ")
   private String name;
 
   @Column(name = "lastname", length = 75)
-  @Size(min = 2, max = 50, message = "El campo 'apellido' admite entre 2 y 50 caracteres")
-  @Pattern(regexp = "^[A-Za-z]+$")
+  @JsonProperty("last_name")
   private String lastName;
 
   @Column(unique = true, name = "docNumber", length = 11)
-  @Size(min = 2, max = 11, message = "El DNI debe tener entre 2 y 11 caracteres.")
-  @Pattern(regexp = "^[0-9]+$")
+  @JsonProperty("identification_number")
   private String docNumber;
 
   @Column(name = "active", nullable = false, columnDefinition = "boolean default true")

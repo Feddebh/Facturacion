@@ -8,10 +8,8 @@ import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.ProductService;
 import java.util.List;
 import javax.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +22,15 @@ public class ProductServiceImpl implements ProductService {
   private final ProductMapper productMapper;
 
   @Override
-  public Product addProduct(@Valid ProductDTO candidateProductDTO) {
+  public Product addNewProduct(@Valid ProductDTO candidateProductDTO) {
     if (productRepository.existsByCode(candidateProductDTO.getCode())) {
       throw new BillingException("El código ya está en uso", HttpStatus.BAD_REQUEST);
     } else {
       log.info("NUEVO PRODUCTO: " + candidateProductDTO);
       Product newProduct = productMapper.productDtoToProduct(candidateProductDTO);
-      return productRepository.save(newProduct);
+      Product savedProduct = productRepository.save(newProduct);
+      savedProduct.setId(savedProduct.getId());
+      return savedProduct;
     }
   }
 
@@ -40,25 +40,27 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Product getProductById(Long productId){
+  public Product getProductById(Long productId) {
     if (productId <= 0) {
       throw new BillingException("EL ID INGRESADO NO ES VALIDO", HttpStatus.BAD_REQUEST);
     }
     return this.productRepository
         .findById(productId)
-        .orElseThrow(() -> new BillingException("No se encontro el producto", HttpStatus.NOT_FOUND));
+        .orElseThrow(
+            () -> new BillingException("No se encontro el producto", HttpStatus.NOT_FOUND));
   }
 
   @Override
-  public Product updateProduct(Long productId, ProductDTO updatedProductDTO){
+  public Product updateExistingProduct(Long productId, ProductDTO updatedProductDTO) {
 
     Product existingProduct =
         productRepository
             .findById(productId)
             .orElseThrow(
-                () -> new BillingException("No se encuentra el producto con ID: " + productId, HttpStatus.NOT_FOUND));
+                () ->
+                    new BillingException(
+                        "No se encuentra el producto con ID: " + productId, HttpStatus.NOT_FOUND));
 
-    // Actualizar el producto
     existingProduct.setDescription(updatedProductDTO.getDescription());
     existingProduct.setCode(updatedProductDTO.getCode());
     existingProduct.setStock(updatedProductDTO.getStock());

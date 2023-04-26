@@ -1,6 +1,6 @@
 ![logo](tools/images/coderLogo.png)
 
-# CURSO DE JAVA: API REST DE FACTURACION
+# CURSO DE JAVA: API REST DE FACTURACIÓN
 Proyecto Final para el curso de Java inicial de CODERHOUSE. Consistiendo el mismo en el desarrollo de una aplicación
 que nos permita administrar las ventas de un comercio.
 
@@ -13,15 +13,15 @@ Sus características principales son:
 
 
 ### Gestión de Clientes:
-* _addClient_: Agrega un nuevo cliente a la base de datos con su Nombre, Apellido y número de Documento, y se le asigna automáticamente un número de ID. 
-* _updateClient_: Actualiza los datos de un cliente existente y activo en la base de datos, tomando como referencia su ID.
+* _registerClient_: Agrega un nuevo cliente a la base de datos con su nombre, apellido y número de documento, y se le asigna automáticamente un número de ID. 
+* _updateExistingClient_: Actualiza los datos de un cliente existente y activo en la base de datos, tomando como referencia su ID.
 * _getAllClients_: Obtiene una lista con todos los clientes registrados en la base de datos.
 * _getClientById_: Obtiene los datos de un cliente en específico a partir de su ID.
 * _getClientByDocNumber_: Obtiene los datos de un cliente en específico a partir de su número de documento.
 
 ### Gestión de Productos:
-* _addProduct_: Agrega un nuevo producto a la base de datos con su descripción, código, stock disponible y precio, y se le asigna automáticamente un número de ID.
-* _updateProduct_: Actualiza los datos de un producto existente y activo en la base de datos, tomando como referencia su ID.
+* _addNewProduct_: Agrega un nuevo producto a la base de datos con su descripción, código, stock disponible y precio, y se le asigna automáticamente un número de ID.
+* _updateExistingProduct_: Actualiza los datos de un producto existente y activo en la base de datos, tomando como referencia su ID.
 * _getAllProducts_: Obtiene una lista con todos los productos registrados en la base de datos.
 * _getProductById_: Obtiene las características de un producto en específico a partir de su ID.
 
@@ -34,7 +34,7 @@ Sus características principales son:
 #### Endpoint
 ```
 URL: /v1/billing
-Input: purchaseRequest
+Input: billingRequest
 Responses: 
     * 201 Created (Nueva factura creada)
     * 404 Not Found
@@ -43,7 +43,7 @@ Responses:
 #### Validaciones
 * Recibe una solicitud POST con el cuerpo en formato JSON y cabecera Content-Type: application/json.
 * Verifica que el cuerpo de la solicitud cumpla con las validaciones de la anotación @Valid en la clase PurchaseRequest.
-* Se valida que el cliente exista en la base de datos antes de asignarlo a la factura
+* Se valida que el cliente exista y este activo en la base de datos antes de asignarlo a la factura
 * Se valida que los detalles de la factura estén correctamente asociados a la factura en el método createInvoice() del servicio InvoiceService
 
 ### 2. getInvoicesByClientId:
@@ -77,7 +77,7 @@ Responses:
 * La validación de la existencia de la factura se realiza en el método del servicio mediante el método findById del repositorio. Si la factura no se encuentra en la base de datos, se lanza una excepción BillingException con un mensaje de error y un código de estado HTTP 404 (Not Found).
 
 ## Gestión de Clientes
-### 1. addClient: 
+### 1. registerClient: 
 
 #### Endpoint
 ```
@@ -89,18 +89,15 @@ Responses:
 ```
 
 #### Validaciones
-* @Size: Se encarga de validar la longitud de los campos name, lastName y docNumber del objeto Client y ClientDTO.
-* @Pattern: valida que los campos name, lastName y docNumber del objeto Client y ClientDTO solo contengan caracteres alfabéticos y numéricos, y que el campo docNumber solo contenga caracteres numéricos.
-* @NotNull: valida que el campo active del objeto Client no sea nulo.
-* @Valid: habilita la validación automática de las propiedades del objeto de entrada ClientDTO en el proceso de deserialización JSON.
+
 * Lanzará un mensaje de error y un código de estado HTTP 400 (Bad Request) en los siguientes casos:
     * Si no se recibe un cuerpo de solicitud válido en formato JSON.
-    * Si los datos enviados en el cuerpo de la solicitud no cumplen con las validaciones definidas en el DTO ClientDTO.
+    * Si los datos enviados en el cuerpo de la solicitud no cumplen con las validaciones definidas en el DTO.
     * Si los datos enviados en el cuerpo de la solicitud son nulos o vacíos.
     * Si el número de documento enviado en el cuerpo de la solicitud ya existe en la base de datos, ya que está definido como campo único en la entidad Client.
     * Si se intenta crear un nuevo cliente con un ID ya existente en la base de datos, lo que no debería suceder, ya que se está utilizando la estrategia de generación automática de ids.
 
-### 2. updateClient:
+### 2. updateExistingClient:
 
 #### Endpoint
 ```
@@ -114,15 +111,12 @@ Responses:
 ```
 
 #### Validaciones
-* Lanzará un mensaje de error y un código de estado HTTP 400 (Bad Request) en los siguientes casos:
-  
-    * Si no se recibe un cuerpo de solicitud válido en formato JSON.
-    * Si los datos enviados en el cuerpo de la solicitud no cumplen con las validaciones definidas en clientDTO.
-    * Si el número de documento enviado en el cuerpo de la solicitud ya existe en la base de datos y pertenece a otro cliente, ya que está definido como campo único en la entidad Client.
+* Lanzará un mensaje de error y un código de estado HTTP 400 (Bad Request):
+  * Si no se recibe un cuerpo de solicitud válido en formato JSON.
+  * Si los datos enviados en el cuerpo de la solicitud no cumplen con las validaciones definidas en clientDTO.
+  * Si el número de documento enviado en el cuerpo de la solicitud ya existe en la base de datos y pertenece a otro cliente, ya que está definido como campo único en la entidad Client.
 
-
- * Lanzará un mensaje de error y un código de estado HTTP 404 (Not Found) en los siguientes casos:
-    * Si el cliente con el número de id especificado en la URL no existe en la base de datos.
+*   Lanzará un mensaje de error y un código de estado HTTP 404 (Not Found) si el cliente con el número de id especificado en la URL no existe en la base de datos.
 
 ### 3. getAllClients:
 
@@ -173,7 +167,7 @@ Responses:
 * Si el objeto Client no es encontrado, se lanza una excepción con un mensaje de error y un estado HTTP 404 (Not Found).
 
 ## Gestión de Productos
-### 1. addProduct:
+### 1. addNewProduct:
 
 #### Endpoint
 ```
@@ -188,10 +182,10 @@ Responses:
 * Si el DTO del producto que se recibe en la solicitud no cumple con las siguientes validaciones definidas en ProductDTO, se lanza una excepción con un mensaje de error y un estado HTTP 400(Bad Request):
     * El campo descripción debe tener una longitud mínima de 2, máxima de 150 caracteres y no debe estar en uso en la base de datos.
     * El código del producto debe tener una longitud mínima de 2 y máxima de 50 caracteres, y debe contener solo dígitos numéricos.
-    * El stock debe ser un número entero positivo.
+    * El stock de be ser un número entero positivo.
     * El precio debe ser un número decimal positivo.
 
-### 2. updateProduct:
+### 2. updateExistingProduct:
 
 #### Endpoint
 ```
@@ -233,7 +227,18 @@ Responses:
 #### Validaciones
 * En caso de que no se encuentre un producto con el número de id proporcionado, se lanza una excepción y devuelve una respuesta con el estado HTTP 404 (Not Found) y un mensaje de error indicando que el producto no fue encontrado.
 ---
-## Configuraciones del proyecto
+
+## Tests
+
+
+
+![logo](tools/images/PostmanLogo.png)
+###  [Descargar colección de Postman](https://drive.google.com/file/d/1SOMRTzkjbiD36269F9PxBp5MIV0snGlg/view?usp=share_link)
+
+
+
+---
+# Configuraciones del proyecto
 
 ### Especificaciones:
 * Java 11
@@ -275,7 +280,7 @@ OS name: "linux", version: "5.15.0-70-generic", arch: "amd64", family: "unix"
 * [org.mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct): para mapear entre Java Beans.
 
 ###  Documentación de API:
-* [Swagger UI](http://localhost:8080/swagger-ui/index.html) (Solo disponible cuando se está ejecutando)
+* [Swagger UI](http://localhost:8080/swagger-ui/index.html) (Solo disponible mientras se está ejecutando la aplicación)
 
 ---
 

@@ -1,8 +1,8 @@
 package edu.coderhouse.jpa.service.impl;
 
 import edu.coderhouse.jpa.exceptions.BillingException;
-import edu.coderhouse.jpa.models.dto.ProductAmountDTO;
-import edu.coderhouse.jpa.models.dto.PurchaseRequest;
+import edu.coderhouse.jpa.models.dto.BillingDetail;
+import edu.coderhouse.jpa.models.dto.BillingRequest;
 import edu.coderhouse.jpa.models.entities.Client;
 import edu.coderhouse.jpa.models.entities.Invoice;
 import edu.coderhouse.jpa.models.entities.InvoiceDetail;
@@ -12,7 +12,6 @@ import edu.coderhouse.jpa.repository.InvoiceDetailRepository;
 import edu.coderhouse.jpa.repository.InvoiceRepository;
 import edu.coderhouse.jpa.repository.ProductRepository;
 import edu.coderhouse.jpa.service.BillingService;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -20,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,78 +34,95 @@ public class BillingServiceImpl implements BillingService {
   private final ProductRepository productRepository;
 
   @Override
-  public Invoice createInvoice(PurchaseRequest purchaseRequest){
+  public Invoice createInvoice(BillingRequest billingRequest) {
 
     // Obtener el cliente de la base de datos por su id
-    Long clientId = purchaseRequest.getClientId();
+    Long clientId = billingRequest.getClientId();
     Client client =
         clientRepository
-            .findById(clientId)
-            .orElseThrow(() -> new BillingException("NO SE PUDO ENCONTRAR EL CLIENTE", HttpStatus.NOT_FOUND));
+            .findClientByIdAndActiveTrue(billingRequest.getClientId())
+            .orElseThrow(
+                () ->
+                    new BillingException(
+                        "NO SE PUDO ENCONTRAR EL CLIENTE CON ID: " + clientId,
+                        HttpStatus.NOT_FOUND));
 
-    // Verificar si el cliente existe
     // Configurar la fecha de creación de la factura
     Invoice invoice = new Invoice();
-    invoice.setCreatedAt(LocalDateTime.now().atZone(ZoneId.of("America/Buenos_Aires")).toLocalDateTime());
+    invoice.setCreatedAt(
+        LocalDateTime.now().atZone(ZoneId.of("America/Buenos_Aires")).toLocalDateTime());
     invoice.setClient(client);
 
-    Invoice savedInvoice = invoiceRepository.save(invoice);
-
+    // Inicializar acumuladores globales
     BigDecimal invoiceTotal = new BigDecimal(0);
+    List<InvoiceDetail> invoiceDetails = new ArrayList<>();
 
-    List<InvoiceDetail> savedDetails = new ArrayList<>();
+    // Iterar indicaciones de facturación
+    for (BillingDetail billingDetail : billingRequest.getBillingDetails()) {
 
-    for (ProductAmountDTO productAmountDTO : purchaseRequest.getPurchaseDetails()) {
-
-      Long productId = productAmountDTO.getProductId();
+      Long productId = billingDetail.getProductId();
       Product product =
           productRepository
               .findById(productId)
               .orElseThrow(
-                  () -> new BillingException("EL PRODUCTO: " + productId + " NO FUE ENCONTRADO", HttpStatus.NOT_FOUND));
+                  () ->
+                      new BillingException(
+                          "NO SE PUDO ENCONTRAR EL PRODUCTO CON ID: " + productId,
+                          HttpStatus.NOT_FOUND));
 
+      // Crear detalle de factura
       InvoiceDetail detail = new InvoiceDetail();
-      detail.setInvoice(savedInvoice);
-      detail.setAmount(productAmountDTO.getAmount());
+      detail.setInvoice(invoice);
+      detail.setAmount(billingDetail.getAmount());
       detail.setAppliedPrice(product.getPrice());
       detail.setProduct(product);
       detail.setSubtotal(detail.getAppliedPrice().multiply(new BigDecimal(detail.getAmount())));
-
       invoiceDetailRepository.save(detail);
-      invoiceTotal = invoiceTotal.add(detail.getSubtotal());
-      savedDetails.add(detail);
-      product.setStock(product.getStock() - productAmountDTO.getAmount());
 
+      // Actualizar Stock
+      int newStock = product.getStock() - billingDetail.getAmount();
+      if (newStock < 0) {
+        throw new BillingException(
+            "EL AMOUNT DEL PRODUCTO CON ID: " + productId + " NO ESTÁ DISPONIBLE EN STOCK.",
+            HttpStatus.BAD_REQUEST);
+      }
+      product.setStock(newStock);
       productRepository.save(product);
+
+      // Incrementar acumuladores
+      invoiceTotal = invoiceTotal.add(detail.getSubtotal());
+      invoiceDetails.add(detail);
     }
 
-    savedInvoice.setTotal(invoiceTotal);
-    savedInvoice.setInvoiceDetails(savedDetails);
+    // Asignar acumuladores a la factura
+    invoice.setTotal(invoiceTotal);
+    invoice.setInvoiceDetails(invoiceDetails);
 
-    // Guardar la factura en la base de datos
-    return invoiceRepository.save(savedInvoice);
+    // Guardar la factura y retornar
+    return invoiceRepository.save(invoice);
   }
 
   @Override
   public List<Invoice> getInvoicesByClientId(Long clientId) {
-
-    // Obtener el cliente de la base de datos por su id
-    Client client = clientRepository.findById(clientId).orElseThrow(() -> new BillingException("No se encontro el cliente con el ID especificado. " + clientId, HttpStatus.NOT_FOUND));
-
-    // Verificar si el cliente exist
-
-    // Obtener las facturas del cliente
-    List<Invoice> invoices = invoiceRepository.findByClient(client);
-
-    // Retornar las facturas del cliente en el cuerpo de la respuesta
-    return ResponseEntity.ok(invoices).getBody();
+    Client client =
+        clientRepository
+            .findById(clientId)
+            .orElseThrow(
+                () ->
+                    new BillingException(
+                        "No se encontro el cliente con el ID especificado. " + clientId,
+                        HttpStatus.NOT_FOUND));
+    return invoiceRepository.findByClient(client);
   }
 
   @Override
-  public Invoice getInvoiceByInvoiceId(Long id) {
-    // Obtener la factura de la base de datos por su id
+  public Invoice getInvoiceById(Long id) {
     return invoiceRepository
-            .findById(id)
-            .orElseThrow(() -> new BillingException("No se encontró la factura con el ID especificado. " + id, HttpStatus.NOT_FOUND));
+        .findById(id)
+        .orElseThrow(
+            () ->
+                new BillingException(
+                    "No se encontró la factura con el ID especificado. " + id,
+                    HttpStatus.NOT_FOUND));
   }
 }
